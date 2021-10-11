@@ -1,7 +1,6 @@
 package by.milavitsky.horse_racing.dao.dao_abstract;
 
 import by.milavitsky.horse_racing.dao.pool.ProxyConnection;
-import by.milavitsky.horse_racing.entity.Bet;
 import by.milavitsky.horse_racing.entity.User;
 import by.milavitsky.horse_racing.exception.DaoException;
 
