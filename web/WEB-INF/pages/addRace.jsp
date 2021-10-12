@@ -22,7 +22,7 @@
                             </label>
                             <div class="col-md-10">
                                 <input class="form-control" type="text" name="location" id="example-text-input"
-                                       required pattern="^[ a-zA-ZАаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщъЫыьЭэЮюЯя'-]{3,50}$">
+                                       required pattern="^[ a-zA-Zа-яА-Я'-]{3,50}$">
                             </div>
                         </div>
                         <div class="form-group row">

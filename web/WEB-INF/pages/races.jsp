@@ -63,7 +63,7 @@
                                     ${(pageCount-1)*6+1+count.index}
                             </td>
                             <td>
-                                <a href="${pageContext.request.contextPath}/dispatcher?command=race&raceId=${race.id}">${race.location}</a>
+                                <a href="${pageContext.request.contextPath}/dispatcher?command=race&raceId=${race.id}">${race.hippodrome}</a>
                             </td>
                             <td>
                                 <fld:format-date dateTime="${race.date}"/>

@@ -3,7 +3,7 @@
     <display-name>Web Application</display-name>
     <servlet>
         <servlet-name>DispatcherServlet</servlet-name>
-        <servlet-class>by.milavitsky.horse_racing.controller.DispatcherServlet</servlet-class>
+        <servlet-class>by.milavitsky.horseracing.controller.DispatcherServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DispatcherServlet</servlet-name>
@@ -11,7 +11,7 @@
     </servlet-mapping>
     <filter>
         <filter-name>EncodingFilter</filter-name>
-        <filter-class>by.milavitsky.horse_racing.controller.filter.EncodingFilter</filter-class>
+        <filter-class>by.milavitsky.horseracing.controller.filter.EncodingFilter</filter-class>
         <init-param>
             <param-name>encoding</param-name>
             <param-value>UTF-8</param-value>
@@ -19,15 +19,15 @@
     </filter>
     <filter>
         <filter-name>XSSFilter</filter-name>
-        <filter-class>by.milavitsky.horse_racing.controller.filter.XSSFilter</filter-class>
+        <filter-class>by.milavitsky.horseracing.controller.filter.XSSFilter</filter-class>
     </filter>
     <filter>
         <filter-name>SecurityFilter</filter-name>
-        <filter-class>by.milavitsky.horse_racing.controller.filter.PermissionAccessFilter</filter-class>
+        <filter-class>by.milavitsky.horseracing.controller.filter.PermissionAccessFilter</filter-class>
     </filter>
     <filter>
         <filter-name>PermissionAccessFilter</filter-name>
-        <filter-class>by.milavitsky.horse_racing.controller.filter.PermissionAccessFilter</filter-class>
+        <filter-class>by.milavitsky.horseracing.controller.filter.PermissionAccessFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>XSSFilter</filter-name>

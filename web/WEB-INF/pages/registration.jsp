@@ -32,7 +32,7 @@
                     </label>
                     <div class="col-md-10">
                         <input class="form-control" id="nameCol" type="text" name="name"
-                               required pattern="^[a-zA-ZАаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщъЫыьЭэЮюЯя'-]{3,20}$"
+                               required pattern="^[a-zA-Zа-яА-Я'-]{3,20}$"
                                oninvalid="<fmt:message key="label.registration.incorrect.name"/>">
                         <script>
                             document.getElementById("nameCol").value = "<c:out value="${userMap['name']}"/>";
@@ -50,7 +50,7 @@
                     </label>
                     <div class="col-md-10">
                         <input class="form-control" id="surnameCol" type="text" name="surname"
-                               required pattern="^[a-zA-ZАаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщъЫыьЭэЮюЯя'-]{3,40}$"
+                               required pattern="^[a-zA-Zа-яА-Я'-]{3,40}$"
                                oninvalid="<fmt:message key="label.registration.incorrect.surname"/>">
                         <script>
                             document.getElementById("surnameCol").value = "<c:out value="${userMap['surname']}"/>";
