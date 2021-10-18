@@ -1,6 +1,6 @@
-package by.milavitsky.horseracing.dao.dao_entity;
+package by.milavitsky.horseracing.dao.daoimpl;
 
-import by.milavitsky.horseracing.dao.dao_abstract.ResultDaoAbstract;
+import by.milavitsky.horseracing.dao.daoabstract.ResultDaoAbstract;
 import by.milavitsky.horseracing.dao.pool.ProxyConnection;
 import by.milavitsky.horseracing.entity.Result;
 

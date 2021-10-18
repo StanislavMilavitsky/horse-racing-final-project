@@ -7,8 +7,8 @@ import by.milavitsky.horseracing.entity.enums.PermissionEnum;
 import by.milavitsky.horseracing.exception.CommandException;
 import by.milavitsky.horseracing.exception.ServiceException;
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.service_interface.HorseServiceInterface;
-import by.milavitsky.horseracing.service.service_interface.RaceServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.HorseServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.RaceServiceInterface;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -1,9 +1,14 @@
-package by.milavitsky.horseracing.service.service_entity;
+package by.milavitsky.horseracing.service.serviceimpl;
 
+import by.milavitsky.horseracing.cache.Cache;
+import by.milavitsky.horseracing.cache.CacheFactory;
+import by.milavitsky.horseracing.cache.CacheType;
 import by.milavitsky.horseracing.dao.DaoFactory;
-import by.milavitsky.horseracing.dao.dao_abstract.UserDaoAbstract;
+import by.milavitsky.horseracing.dao.daoabstract.RolePermissionsDaoAbstract;
+import by.milavitsky.horseracing.dao.daoabstract.UserDaoAbstract;
+import by.milavitsky.horseracing.entity.Role;
 import by.milavitsky.horseracing.entity.User;
-import by.milavitsky.horseracing.service.service_interface.UserServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.UserServiceInterface;
 import by.milavitsky.horseracing.util.BCryptService;
 import by.milavitsky.horseracing.validation.CommonValidator;
 import by.milavitsky.horseracing.validation.UserValidator;
@@ -13,14 +18,18 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
+
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 
+import static by.milavitsky.horseracing.cache.CacheVariables.COUNT_ACTIVE;
+import static by.milavitsky.horseracing.cache.CacheVariables.USER_ROLES;
 import static by.milavitsky.horseracing.controller.CommandParameter.*;
-import static by.milavitsky.horseracing.service.service_entity.ServiceParameter.USERS_ON_PAGE;
+import static by.milavitsky.horseracing.service.ServiceParameter.USERS_ON_PAGE;
 
 
 public class UserService implements UserServiceInterface {
@@ -32,20 +41,20 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public User authorization(User user) throws ServiceException {
+        if (!UserValidator.isValidEmail(user.getEmail()) || !UserValidator.isValidPassword(user.getPassword())) {
+            return null;
+        }
         try {
-            if (!UserValidator.isValidEmail(user.getEmail()) || !UserValidator.isValidPassword(user.getPassword())) {
-                return null;
-            }
             UserDaoAbstract userDao = (UserDaoAbstract) DaoFactory.getInstance().getClass(UserDaoAbstract.class);
-           Optional<User> userAuthorized = userDao.authorization(user);//todo
-            User userAuthorizedOfOptional = userAuthorized.get();
-            if (userAuthorizedOfOptional == null) {
+           User userAuthorized = userDao.authorization(user);//todo
+            if (userAuthorized == null) {//todo
                 return null;
             }
-            if (!BCryptService.verifyPassword(user.getPassword(), userAuthorizedOfOptional.getPassword())) {
+            if (!BCryptService.verifyPassword(user.getPassword(), userAuthorized.getPassword())) {//todo
                 return null;
             }
-            return userAuthorizedOfOptional;
+            setCashRole(userAuthorized);
+            return userAuthorized;
         } catch (DaoException e) {
             logger.error("Authorization exception!", e);
             throw new ServiceException("Authorization exception!", e);
@@ -85,7 +94,14 @@ public class UserService implements UserServiceInterface {
             if (!invalidUser) {
                 String password = userUI.getPassword();
                 userUI.setPassword(BCryptService.hashPassword(password));
-                userDao.create(userUI);
+                userDao.registration(userUI);
+                Cache cache = (Cache) CacheFactory.getInstance().getCache(CacheType.USER_COUNT);
+                if (!cache.isEmpty()) {
+                    AtomicLong aLong = (AtomicLong) cache.getCache(COUNT_ACTIVE);
+                    long newLong = aLong.incrementAndGet();
+                    AtomicLong newALong = new AtomicLong(newLong);
+                    cache.setCacheValue(COUNT_ACTIVE, aLong, newALong);
+                }
                 return null;
             }
             return userMAP;
@@ -122,7 +138,22 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public int getUsersPagesCount() throws ServiceException {
-        return 0;
+        try {
+            long count;
+            Cache cache = (Cache) CacheFactory.getInstance().getCache(CacheType.USER_COUNT);
+            if (cache.isEmpty()) {
+                UserDaoAbstract userDao = (UserDaoAbstract) DaoFactory.getInstance().getClass(UserDaoAbstract.class);
+                count = userDao.count();
+                cache.addCache(COUNT_ACTIVE, new AtomicLong(count));
+            } else {
+                AtomicLong aLong = (AtomicLong) cache.getCache(COUNT_ACTIVE);
+                count = aLong.get();
+            }
+            return (int) Math.ceil((double) count / USERS_ON_PAGE);
+        } catch (DaoException e) {
+            logger.error("Users count exception!", e);
+            throw new ServiceException("Users count exception!", e);
+        }
     }
     @Override
     public boolean ban(String userId) throws ServiceException {
@@ -146,5 +177,22 @@ public class UserService implements UserServiceInterface {
         return UserServiceHolder.HOLDER_INSTANCE;
     }
 
+    private void setCashRole(User user) throws DaoException {
+        Cache cache = (Cache) CacheFactory.getInstance().getCache(CacheType.ROLES);
+        List<Role> roles;
+        if (cache.isEmpty()) {
+            RolePermissionsDaoAbstract rolePermissionsDao = (RolePermissionsDaoAbstract) DaoFactory.getInstance()
+                    .getClass(RolePermissionsDaoAbstract.class);
+            roles = rolePermissionsDao.findAll();
+            cache.addCache(USER_ROLES, roles);
+        } else {
+            roles = (List<Role>) cache.getCache(USER_ROLES);
+        }
+        for (Role role : roles) {
+            if (role.getId().equals(user.getRole().getId())) {
+                user.setRole(role);
+            }
+        }
+    }
 
 }

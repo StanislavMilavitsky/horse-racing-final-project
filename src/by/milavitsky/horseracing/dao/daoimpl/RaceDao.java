@@ -1,7 +1,7 @@
-package by.milavitsky.horseracing.dao.dao_entity;
+package by.milavitsky.horseracing.dao.daoimpl;
 
 
-import by.milavitsky.horseracing.dao.dao_abstract.RaceDaoAbstract;
+import by.milavitsky.horseracing.dao.daoabstract.RaceDaoAbstract;
 import by.milavitsky.horseracing.dao.pool.ConnectionManager;
 import by.milavitsky.horseracing.dao.pool.ProxyConnection;
 import by.milavitsky.horseracing.entity.Race;
@@ -19,16 +19,17 @@ public class RaceDao extends RaceDaoAbstract {
     private RaceDao(){
     }
 
+    private static final String SHOW_ALL_RACES_ACTIVE_SQL = "SELECT id, hippodrome, time, race_type FROM races " +
+            "WHERE time > CURRENT_TIMESTAMP ORDER BY time limit ? offset ?;";;
+
 
     private static final String SELECT_RACE_SQL = "SELECT r.hippodrome,r.time,COUNT(b.id),SUM(b.amount_bet) FROM races r" +
             " LEFT JOIN bets b ON r.id = b.races_id WHERE r.id=?;";
 
     public static final String SHOW_ALL_RACES_SQL = "SELECT id, hippodrome, time, race_type FROM races " +
-            "WHERE time > CURRENT_TIMESTAMP ORDER BY time limit ? offset ?;";
+            "ORDER BY time limit ? offset ?;";
 
     private static final String ADD_RACE_RESULT_SQL = "UPDATE races_has_horses SET place = ? WHERE rases_id = ? AND horses_id = ?";
-
-    public static final String SELECT_HORSE = "SELECT horses_id FROM races_has_horses WHERE rases_id = ?;";
 
     public static final String ADD_RACE_SQL = "INSERT INTO races (race_type, time, hippodrome) VALUES (?, ?, ?);";
 
@@ -46,7 +47,7 @@ public class RaceDao extends RaceDaoAbstract {
 
     @Override
     public List<Race> findActive(int limit, int offset) throws DaoException {
-        return findAll(SHOW_ALL_RACES_SQL, limit, offset);
+        return findAll(SHOW_ALL_RACES_ACTIVE_SQL, limit, offset);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class RaceDao extends RaceDaoAbstract {
     }
 
     @Override
-    public Optional<Race> create(Race race) throws DaoException {
+    public Optional<Race> registration(Race race) throws DaoException {
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(ADD_RACE_SQL, Statement.RETURN_GENERATED_KEYS);
              var preparedStatementHorse = connection.prepareStatement(ADD_HORSE_RACE_SQL);) {

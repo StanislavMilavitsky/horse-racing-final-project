@@ -5,7 +5,7 @@ import by.milavitsky.horseracing.controller.Router;
 import by.milavitsky.horseracing.entity.User;
 import by.milavitsky.horseracing.entity.enums.PermissionEnum;
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.service_interface.UserServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.UserServiceInterface;
 import by.milavitsky.horseracing.exception.CommandException;
 import by.milavitsky.horseracing.exception.ServiceException;
 
@@ -16,7 +16,6 @@ import javax.servlet.http.HttpSession;
 import java.util.Set;
 
 import static by.milavitsky.horseracing.controller.CommandParameter.*;
-import static by.milavitsky.horseracing.entity.enums.PermissionEnum.GUEST_BASIC;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class LogInCommand implements Command {

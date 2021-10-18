@@ -1,6 +1,6 @@
-package by.milavitsky.horseracing.dao.dao_entity;
+package by.milavitsky.horseracing.dao.daoimpl;
 
-import by.milavitsky.horseracing.dao.dao_abstract.BetDaoAbstract;
+import by.milavitsky.horseracing.dao.daoabstract.BetDaoAbstract;
 import by.milavitsky.horseracing.dao.pool.ConnectionManager;
 
 import by.milavitsky.horseracing.dao.pool.ProxyConnection;
@@ -8,7 +8,6 @@ import by.milavitsky.horseracing.entity.Bet;
 import by.milavitsky.horseracing.entity.Horse;
 import by.milavitsky.horseracing.entity.Race;
 import by.milavitsky.horseracing.entity.enums.BetType;
-import by.milavitsky.horseracing.entity.enums.TransferStatusEnum;
 import by.milavitsky.horseracing.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -54,7 +53,7 @@ public class BetDao extends BetDaoAbstract {
              var preparedStatement = connection.prepareStatement(SHOW_BET_BY_USER_SQL)) {
             preparedStatement.setLong(1, userId);
             var resultSet = preparedStatement.executeQuery();
-            Bet bet = null;
+            Bet bet;
             List<Bet> bets = null;
             while (resultSet.next()) {
                 Horse horse = new Horse();
@@ -67,7 +66,7 @@ public class BetDao extends BetDaoAbstract {
                         resultSet.getBigDecimal("amount_bet"), //todo
                         resultSet.getBigDecimal("ratio"),
                         resultSet.getLong("races_id"),
-                        TransferStatusEnum.valueOf(resultSet.getString("ts.name")),
+                        resultSet.getString("ts.name"),
                         resultSet.getObject("time", Timestamp.class).toLocalDateTime(),
                         resultSet.getLong("user_id"),
                         resultSet.getLong("horse_id"),
@@ -96,7 +95,7 @@ public class BetDao extends BetDaoAbstract {
                     resultSet.getBigDecimal("amount_bet"),
                     resultSet.getBigDecimal("ratio"),
                     raceId,
-                    TransferStatusEnum.valueOf(resultSet.getString("ts.name")),
+                    resultSet.getString("ts.name"),
                     resultSet.getObject("time", Timestamp.class).toLocalDateTime(),
                     resultSet.getLong("user_id"),
                     resultSet.getLong("horse_id"),
@@ -143,7 +142,7 @@ public class BetDao extends BetDaoAbstract {
             preparedStatement.setBigDecimal(1, bet.getAmountBet());
             preparedStatement.setBigDecimal(2, bet.getRatio());
             preparedStatement.setLong(3, bet.getRacesId());
-            preparedStatement.setLong(4, bet.getTransferStatus().ordinal() + 1L);
+            preparedStatement.setString(4, bet.getTransferStatus());
             preparedStatement.setLong(5, bet.getUserId());
             preparedStatement.setLong(6, bet.getHorseId());
             preparedStatement.setLong(7, bet.getBetType().ordinal() + 1L);

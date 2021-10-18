@@ -1,4 +1,4 @@
-package by.milavitsky.horseracing.dao.dao_abstract;
+package by.milavitsky.horseracing.dao.daoabstract;
 
 import by.milavitsky.horseracing.dao.pool.ProxyConnection;
 import by.milavitsky.horseracing.entity.User;
@@ -13,7 +13,7 @@ import java.util.Optional;
 public abstract class UserDaoAbstract implements Dao<User, Long> {
 
 
-    public abstract Optional<User> authorization(User user) throws DaoException;
+    public abstract User authorization(User user) throws DaoException;
 
     public abstract Optional<User> findByEmail(String email) throws DaoException;
 
@@ -42,4 +42,5 @@ public abstract class UserDaoAbstract implements Dao<User, Long> {
         throw new UnsupportedOperationException();
     }
 
+    public abstract long count() throws DaoException;
 }

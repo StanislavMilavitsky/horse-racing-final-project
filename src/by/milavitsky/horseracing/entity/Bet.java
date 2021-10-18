@@ -1,7 +1,6 @@
 package by.milavitsky.horseracing.entity;
 
 import by.milavitsky.horseracing.entity.enums.BetType;
-import by.milavitsky.horseracing.entity.enums.TransferStatusEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -16,7 +15,7 @@ public class Bet implements Serializable {
     private BigDecimal amountBet;
     private BigDecimal ratio;
     private Long racesId;
-    private TransferStatusEnum transferStatus;
+    private String transferStatus;
     private LocalDateTime time;
     private Long userId;
     private Long horseId;
@@ -29,7 +28,7 @@ public class Bet implements Serializable {
     }
 
 
-    public Bet(Long id, BigDecimal amountBet, BigDecimal ratio, Long racesId, TransferStatusEnum transferStatus,
+    public Bet(Long id, BigDecimal amountBet, BigDecimal ratio, Long racesId, String transferStatus,
                LocalDateTime time, Long userId, Long horseId, BetType betType, Horse horse, Race race) {
         this.id = id;
         this.amountBet = amountBet;
@@ -44,7 +43,7 @@ public class Bet implements Serializable {
         this.race = race;
     }
 
-    public Bet(Long id, BigDecimal amountBet, BigDecimal ratio, Long racesId, TransferStatusEnum transferStatus,
+    public Bet(Long id, BigDecimal amountBet, BigDecimal ratio, Long racesId, String transferStatus,
                LocalDateTime time, Long userId, Long horseId, BetType betType) {
         this.id = id;
         this.amountBet = amountBet;
@@ -57,7 +56,7 @@ public class Bet implements Serializable {
         this.betType = betType;
     }
 
-    public Bet(Long id, BigDecimal amountBet, BigDecimal ratio, Long racesId, TransferStatusEnum transferStatus,
+    public Bet(Long id, BigDecimal amountBet, BigDecimal ratio, Long racesId, String transferStatus,
                LocalDateTime time, Long userId, Long horseId, Horse horse, Race race) {
         this.id = id;
         this.amountBet = amountBet;
@@ -72,7 +71,7 @@ public class Bet implements Serializable {
 
     }
 
-    public Bet(Long id, BigDecimal amountBet, BigDecimal ratio, Long racesId, TransferStatusEnum transferStatus,
+    public Bet(Long id, BigDecimal amountBet, BigDecimal ratio, Long racesId, String transferStatus,
                LocalDateTime time, Long userId, Long horseId, Horse horse, Race race, BetType betType) {
         this.id = id;
         this.amountBet = amountBet;
@@ -128,11 +127,11 @@ public class Bet implements Serializable {
         this.racesId = racesId;
     }
 
-    public TransferStatusEnum getTransferStatus() {
+    public String getTransferStatus() {
         return transferStatus;
     }
 
-    public void setTransferStatus(TransferStatusEnum transferStatus) {
+    public void setTransferStatus(String transferStatus) {
         this.transferStatus = transferStatus;
     }
 

@@ -1,6 +1,6 @@
-package by.milavitsky.horseracing.dao.dao_entity;
+package by.milavitsky.horseracing.dao.daoimpl;
 
-import by.milavitsky.horseracing.dao.dao_abstract.HorseDaoAbstract;
+import by.milavitsky.horseracing.dao.daoabstract.HorseDaoAbstract;
 import by.milavitsky.horseracing.dao.pool.ConnectionManager;
 import by.milavitsky.horseracing.entity.Horse;
 import by.milavitsky.horseracing.entity.enums.SexEnum;

@@ -1,11 +1,11 @@
 package by.milavitsky.horseracing.dao.pool;
 
 import by.milavitsky.horseracing.dao.DaoFactory;
-import by.milavitsky.horseracing.dao.dao_abstract.BetDaoAbstract;
-import by.milavitsky.horseracing.dao.dao_abstract.RaceDaoAbstract;
+import by.milavitsky.horseracing.dao.daoabstract.BetDaoAbstract;
+import by.milavitsky.horseracing.dao.daoabstract.RaceDaoAbstract;
 
-import by.milavitsky.horseracing.dao.dao_abstract.ResultDaoAbstract;
-import by.milavitsky.horseracing.dao.dao_abstract.UserDaoAbstract;
+import by.milavitsky.horseracing.dao.daoabstract.ResultDaoAbstract;
+import by.milavitsky.horseracing.dao.daoabstract.UserDaoAbstract;
 import by.milavitsky.horseracing.entity.Bet;
 import by.milavitsky.horseracing.entity.Result;
 import by.milavitsky.horseracing.entity.enums.TotalResultEnum;
@@ -94,7 +94,7 @@ public class TransactionManager {
             if (bet.getAmountBet().compareTo(cash) > 0) {
                 return Optional.empty();
             }
-            Bet betDB = betDao.create(connection, bet);
+            Bet betDB = betDao.create(connection, bet);//todo
 
             BigDecimal newCash = cash.subtract(bet.getAmountBet());
             boolean result = userDao.updateCash(connection, newCash, bet.getUserId());

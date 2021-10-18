@@ -26,12 +26,11 @@ public class CacheFactory {
         return cacheMap.get(type);
     }
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
+    private static class CacheFactoryHolder{
+        private static final CacheFactory HOLDER_INSTANCE = new CacheFactory();
+    }
+
     public static CacheFactory getInstance() {
-        return instance;
+        return CacheFactoryHolder.HOLDER_INSTANCE;
     }
 }

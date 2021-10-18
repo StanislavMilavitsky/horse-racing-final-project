@@ -1,4 +1,4 @@
-package by.milavitsky.horseracing.service.service_entity;
+package by.milavitsky.horseracing.service;
 
 public class ServiceParameter {
     public static final int RACES_ON_PAGE = 6;

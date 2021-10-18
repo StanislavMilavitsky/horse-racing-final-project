@@ -1,7 +1,7 @@
-package by.milavitsky.horseracing.dao.dao_entity;
+package by.milavitsky.horseracing.dao.daoimpl;
 
 
-import by.milavitsky.horseracing.dao.dao_abstract.UserDaoAbstract;
+import by.milavitsky.horseracing.dao.daoabstract.UserDaoAbstract;
 import by.milavitsky.horseracing.dao.pool.ConnectionManager;
 import by.milavitsky.horseracing.dao.pool.ProxyConnection;
 import by.milavitsky.horseracing.entity.Role;
@@ -21,21 +21,16 @@ import java.util.Optional;
 public class UserDao extends UserDaoAbstract {
     private static final Logger logger = LogManager.getLogger(BetDao.class);
 
-    /**
-     * Create simple sql commands in String type
-     */
-    private static final String DELETE_SQL = "DELETE FROM users WHERE id = ?;";
-
     private static final String BAN_SQL = "UPDATE users SET status=0  WHERE id = ?;";
 
-    private static final String SAVE_SQL = "INSERT INTO users (name, passport, email, phone, bank_account," +
-            " password, status, nickname, persentage_of_win, avatar, date_of_register, rates, surname, role_id, cash) VALUES" +
-            " (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    private static final String SAVE_SQL = "INSERT INTO users (name, email," +
+            " password, date_of_register, surname) VALUES" +
+            " (?, ?, ?, ?, ?);";
 
-    public static final String FIND_ALL_SQL = "SELECT id, name, passport, email, phone, bank_account, password, status," +
-            " nickname, persentage_of_win, avatar, date_of_register, rates, surname, role_id, cash FROM users where status=1 LIMIT ? OFFSET  ?";
+    public static final String FIND_ALL_SQL = "SELECT id, name, email, bank_account, password, status," +
+            " persentage_of_win, avatar, date_of_register, rates, surname, role_id, cash FROM users where status=1 LIMIT ? OFFSET  ?";
 
-    private static final String USER_AUTHORIZED_SQL = "SELECT email, password FROM users WHERE email=?";
+    private static final String USER_AUTHORIZED_SQL = "SELECT id, password, name, surname, cash, role_id FROM users WHERE email=? AND status=1";
 
     public static final String USER_EXIST_SQL = "SELECT 1 FROM users WHERE email = ?;";
 
@@ -43,11 +38,13 @@ public class UserDao extends UserDaoAbstract {
 
     public static final String UPDATE_CASH_SQL = "UPDATE users SET cash=? WHERE id=?;";
 
+    private static final String COUNT_USERS_SQL = "SELECT count(id) FROM users WHERE status=1 ;";
+
     private UserDao() {
     }
 
     @Override
-    public Optional<User> authorization(User user) throws DaoException {
+    public User authorization(User user) throws DaoException {
         try (var connection = ConnectionManager.get();
              var statement = connection.prepareStatement(USER_AUTHORIZED_SQL)) {//todo
             statement.setString(1, user.getEmail());
@@ -55,54 +52,24 @@ public class UserDao extends UserDaoAbstract {
             User userDao = null;
             while (resultSet.next()) {
                 userDao = new User();
-                user.setEmail(resultSet.getString("email"));
-                user.setPassword(resultSet.getString("passport"));
+                userDao.setId(resultSet.getLong("id"));
+                userDao.setEmail(user.getEmail());
+                userDao.setPassword(resultSet.getString("password"));
+                userDao.setSurname(resultSet.getString("surname"));
+                userDao.setName(resultSet.getString("name"));
+                userDao.setCash(resultSet.getBigDecimal("cash"));
+                userDao.setRole(new Role((resultSet.getLong("role_id"))));
 
             }
-            return Optional.ofNullable(userDao);
+            return userDao;
         } catch (SQLException ex) {
             logger.error("User authorization failed!", ex);
             throw new DaoException("User authorization failed!", ex);
         }
     }
 
-    /*public User authorization(User user) throws DaoException {
-        try (var connection = ConnectionManager.get();
-             var statement = connection.prepareStatement(USER_AUTHORIZED_SQL)) {//todo
-            statement.setString(1, user.getEmail());
-            var resultSet = statement.executeQuery();
-            User userDao = null;
-            while (resultSet.next()) {
-                Long id = resultSet.getLong("id");
-                String name = resultSet.getString("name");
-                String passport = resultSet.getString("passport");
-                String email = resultSet.getString("email");
-                String phone = resultSet.getString("phone");
-                String bankAccount = resultSet.getString("bank_account");
-                String password = resultSet.getString("password");
-                String status = resultSet.getString("status");
-                String nickname = resultSet.getString("nickname");
-                BigDecimal persentageOfWin = resultSet.getBigDecimal("persentage_of_win");
-                String avatar = resultSet.getString("avatar");
-                LocalDateTime dateOfRegister = resultSet.getObject("date_of_register", Timestamp.class).toLocalDateTime();
-                Integer rates = resultSet.getInt("rates");
-                String surName = resultSet.getString("surname");
-                PermissionEnum permissionEnum = PermissionEnum.valueOf(resultSet.getString("access_level"));
-                BigDecimal cash = resultSet.getBigDecimal("cash");
-                userDao = new User(id, name, passport, email, phone, bankAccount, password, status, nickname, persentageOfWin,
-                        avatar, dateOfRegister, rates, surName, permissionEnum, cash);
-            }
-            return userDao;
-        } catch (SQLException e) {
-            logger.error("User authorization failed!", e);
-            throw new DaoException("User authorization failed!", e);
-
-        }
-    }*/
-
     @Override
     public Optional<User> findByEmail(String email) throws DaoException {
-        User userDao = null;
         try (var connection = ConnectionManager.get();
              var statement = connection.prepareStatement(USER_EXIST_SQL)) {
             statement.setString(1, email);
@@ -120,32 +87,22 @@ public class UserDao extends UserDaoAbstract {
     }
 
     @Override
-    public Optional<User> create(User user) throws DaoException {
+    public Optional<User> registration(User user) throws DaoException {
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getPassport());
-            preparedStatement.setString(3, user.getEmail());
-            preparedStatement.setString(4, user.getPhone());
-            preparedStatement.setString(5, user.getBankAccount());
-            preparedStatement.setString(6, user.getPassword());
-            preparedStatement.setString(7, user.getStatus());
-            preparedStatement.setString(8, user.getNickname());
-            preparedStatement.setBigDecimal(9, user.getPersentageOfWin());
-            preparedStatement.setString(10, user.getAvatar());
-            preparedStatement.setObject(11, LocalDateTime.now());
-            preparedStatement.setInt(12, user.getRates());
-            preparedStatement.setString(13, user.getSurname());
-            preparedStatement.setLong(14, user.getRole().getId());
-            preparedStatement.setBigDecimal(15, user.getCash());
+            preparedStatement.setString(2, user.getEmail());
+            preparedStatement.setString(3, user.getPassword());
+            preparedStatement.setObject(4, LocalDateTime.now());
+            preparedStatement.setString(5, user.getSurname());
 
             preparedStatement.executeUpdate();
 
             var generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                user.setId(generatedKeys.getLong("id"));
+                user.setId(generatedKeys.getLong(1));
             }
-            return Optional.ofNullable(user);
+            return Optional.of(user);
         } catch (SQLException e) {
             logger.fatal("Cant create user!", e);
             throw new DaoException(e);
@@ -157,6 +114,8 @@ public class UserDao extends UserDaoAbstract {
     public List<User> findAll(int limit, int offset) throws DaoException {
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(FIND_ALL_SQL)) {
+            preparedStatement.setInt(1, limit);
+            preparedStatement.setInt(2, offset);
             var resultSet = preparedStatement.executeQuery();
             List<User> users = new ArrayList<>();
             while (resultSet.next()) {
@@ -219,6 +178,23 @@ public class UserDao extends UserDaoAbstract {
 
     }
 
+    @Override
+    public long count() throws DaoException {
+
+        try (var proxyConnection = ConnectionManager.get();
+             var statement = proxyConnection.createStatement()){
+            var resultSet = statement.executeQuery(COUNT_USERS_SQL);
+            long count = 0L;
+            if (resultSet.next()) {
+                count = resultSet.getLong("count(id)");
+            }
+            return count;
+        } catch (SQLException e) {
+            logger.error("Count races exception!", e);
+            throw new DaoException("Count races exception!", e);
+        }
+    }
+
     private static class UserDaoHolder {
         private static final UserDao HOLDER_INSTANCE = new UserDao();
     }
@@ -230,16 +206,13 @@ public class UserDao extends UserDaoAbstract {
     private User buildUser(ResultSet resultSet) throws SQLException {
         return new User(resultSet.getLong("id"),
                 resultSet.getString("name"),
-                resultSet.getString("passport"),
                 resultSet.getString("email"),
-                resultSet.getString("phone"),
                 resultSet.getString("bank_account"),
                 resultSet.getString("password"),
                 resultSet.getString("status"),
-                resultSet.getString("nickname"),
                 resultSet.getBigDecimal("persentage_of_win"),
                 resultSet.getString("avatar"),
-                resultSet.getObject("data_of_register", Timestamp.class).toLocalDateTime(),
+                resultSet.getObject("date_of_register", Timestamp.class).toLocalDateTime(),
                 resultSet.getInt("rates"),
                 resultSet.getString("surname"),
                 new Role(resultSet.getLong("role_id")),

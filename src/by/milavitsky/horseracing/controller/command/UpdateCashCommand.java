@@ -7,7 +7,7 @@ import by.milavitsky.horseracing.entity.enums.PermissionEnum;
 import by.milavitsky.horseracing.exception.CommandException;
 import by.milavitsky.horseracing.exception.ServiceException;
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.service_interface.UserServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.UserServiceInterface;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

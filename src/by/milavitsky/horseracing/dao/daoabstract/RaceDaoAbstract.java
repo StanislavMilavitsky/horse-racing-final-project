@@ -1,4 +1,4 @@
-package by.milavitsky.horseracing.dao.dao_abstract;
+package by.milavitsky.horseracing.dao.daoabstract;
 
 import by.milavitsky.horseracing.dao.pool.ProxyConnection;
 import by.milavitsky.horseracing.entity.Race;
@@ -17,7 +17,7 @@ public abstract class RaceDaoAbstract implements Dao<Race, Long> {
 
     public abstract List<Race> findAll(int limit, int offset) throws DaoException;
 
-    public abstract Optional<Race> create(Race race) throws DaoException;
+    public abstract Optional<Race> registration(Race race) throws DaoException;
 
     public abstract boolean deleteRace(ProxyConnection connection, Long id) throws SQLException;
 

@@ -11,13 +11,10 @@ public class User implements Serializable {
 
     private Long id;
     private String name;
-    private String passport;
     private String email;
-    private String phone;
     private String  bankAccount;
     private String  password;
     private String status;
-    private String nickname;
     private BigDecimal persentageOfWin;
     private String avatar;
     private LocalDateTime dateOfRegister;
@@ -29,17 +26,14 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(Long id, String name, String passport, String email, String phone, String bankAccount, String password,
-                String status, String nickname, BigDecimal persentageOfWin, String avatar, LocalDateTime dateOfRegister, Integer rates, String surname, Role role, BigDecimal cash) {
+    public User(Long id, String name, String email, String bankAccount, String password,
+                String status, BigDecimal persentageOfWin, String avatar, LocalDateTime dateOfRegister, Integer rates, String surname, Role role, BigDecimal cash) {
         this.id = id;
         this.name = name;
-        this.passport = passport;
         this.email = email;
-        this.phone = phone;
         this.bankAccount = bankAccount;
         this.password = password;
         this.status = status;
-        this.nickname = nickname;
         this.persentageOfWin = persentageOfWin;
         this.avatar = avatar;
         this.dateOfRegister = dateOfRegister;
@@ -54,6 +48,36 @@ public class User implements Serializable {
         this.surname = surname;
         this.password = password;
         this.email = email;
+    }
+
+
+
+    public String getBankAccount() {
+        return bankAccount;
+    }
+
+    public void setBankAccount(String bankAccount) {
+        this.bankAccount = bankAccount;
+    }
+
+    public BigDecimal getPersentageOfWin() {
+        return persentageOfWin;
+    }
+
+    public void setPersentageOfWin(BigDecimal persentageOfWin) {
+        this.persentageOfWin = persentageOfWin;
+    }
+
+    public void setDateOfRegister(LocalDateTime dateOfRegister) {
+        this.dateOfRegister = dateOfRegister;
+    }
+
+    public void setRates(Integer rates) {
+        this.rates = rates;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public BigDecimal getCash() {
@@ -76,10 +100,6 @@ public class User implements Serializable {
         return surname;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -88,20 +108,8 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public void setPassport(String passport) {
-        this.passport = passport;
-    }
-
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public void setBankAccount(String bankAccount) {
-        this.bankAccount = bankAccount;
     }
 
     public void setPassword(String password) {
@@ -112,25 +120,8 @@ public class User implements Serializable {
         this.status = status;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public void setPersentageOfWin(BigDecimal persentageOfWin) {
-        this.persentageOfWin = persentageOfWin;
-    }
-
-
     public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-
-    public void setDateOfRegister(LocalDateTime dateOfRegister) {
-        this.dateOfRegister = dateOfRegister;
-    }
-
-    public void setRates(Integer rates) {
-        this.rates = rates;
     }
 
     public Long getId() {
@@ -141,20 +132,8 @@ public class User implements Serializable {
         return name;
     }
 
-    public String getPassport() {
-        return passport;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getBankAccount() {
-        return bankAccount;
     }
 
     public String getPassword() {
@@ -165,13 +144,6 @@ public class User implements Serializable {
         return status;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public BigDecimal getPersentageOfWin() {
-        return persentageOfWin;
-    }
 
     public String getAvatar() {
         return avatar;
@@ -187,7 +159,7 @@ public class User implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
+        if (this == o) return true;//todo
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return Objects.equals(id, user.id);
@@ -204,16 +176,13 @@ public class User implements Serializable {
             builder.append("id=").append(id);
             builder.append(", surname='").append(surname );
             builder.append(", name='").append(name);
-            builder.append(", passport='").append(passport);
             builder.append(", email='").append(email);
-            builder.append(", phone='").append(phone);
             builder.append(", bankAccount='").append(bankAccount);
             builder.append(", role=").append(role);
             builder.append(", avatar='").append(avatar);
             builder.append(", dateOfRegister=").append(dateOfRegister);
             builder.append(", rates=").append(rates);
             builder.append(", status='").append(status);
-            builder.append(", nickname='").append(nickname);
             builder.append(", persentageOfWin=").append(persentageOfWin);
             builder.append(", cash=").append(cash);
             builder.append('}');

@@ -5,6 +5,7 @@
     <title>Index</title>
 </head>
 <body>
+<%--<c:redirect url="dispatcher?command=races"></c:redirect>--%>
 <jsp:forward page="dispatcher?command=races"/>
 </body>
 </html>

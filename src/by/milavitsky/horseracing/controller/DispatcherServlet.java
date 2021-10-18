@@ -60,7 +60,7 @@ public class DispatcherServlet extends HttpServlet {
                 req.getRequestDispatcher(PAGE_404).forward(req, resp);
                 return;
             }
-            if (router.isRedirect()) {
+             if (router.isRedirect()) {
                 logger.info("Redirect: " + router.getPage());
                 resp.sendRedirect(router.getPage());
             } else {

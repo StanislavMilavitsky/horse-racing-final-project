@@ -5,8 +5,8 @@ import by.milavitsky.horseracing.controller.Router;
 import by.milavitsky.horseracing.entity.User;
 import by.milavitsky.horseracing.entity.enums.PermissionEnum;
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.service_entity.UserService;
-import by.milavitsky.horseracing.service.service_interface.UserServiceInterface;
+import by.milavitsky.horseracing.service.serviceimpl.UserService;
+import by.milavitsky.horseracing.service.serviceinterface.UserServiceInterface;
 import by.milavitsky.horseracing.exception.CommandException;
 import by.milavitsky.horseracing.exception.ServiceException;
 
@@ -23,7 +23,7 @@ public class ShowUsersCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) throws CommandException {
         try {
-            UserServiceInterface userService = (UserServiceInterface) ServiceFactory.getInstance().getClass(UserService.class);
+            UserServiceInterface userService = (UserServiceInterface) ServiceFactory.getInstance().getClass(UserServiceInterface.class);
             int pagesCount = userService.getUsersPagesCount();
             request.setAttribute(ATTR_PAGE_NUMBER, pagesCount);
             String page = request.getParameter(PARAM_PAGE);

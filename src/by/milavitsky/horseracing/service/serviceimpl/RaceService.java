@@ -1,15 +1,15 @@
-package by.milavitsky.horseracing.service.service_entity;
+package by.milavitsky.horseracing.service.serviceimpl;
 
 import by.milavitsky.horseracing.dao.DaoFactory;
 import by.milavitsky.horseracing.cache.Cache;
 import by.milavitsky.horseracing.cache.CacheFactory;
 import by.milavitsky.horseracing.cache.CacheType;
-import by.milavitsky.horseracing.dao.dao_abstract.RaceDaoAbstract;
+import by.milavitsky.horseracing.dao.daoabstract.RaceDaoAbstract;
 import by.milavitsky.horseracing.dao.pool.TransactionManager;
 import by.milavitsky.horseracing.entity.Race;
 import by.milavitsky.horseracing.exception.DaoException;
 import by.milavitsky.horseracing.exception.ServiceException;
-import by.milavitsky.horseracing.service.service_interface.RaceServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.RaceServiceInterface;
 import by.milavitsky.horseracing.validation.CommonValidator;
 import by.milavitsky.horseracing.validation.RaceValidator;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static by.milavitsky.horseracing.cache.CacheVariables.COUNT_ACTIVE;
 import static by.milavitsky.horseracing.cache.CacheVariables.COUNT_ALL;
-import static by.milavitsky.horseracing.service.service_entity.ServiceParameter.RACES_ON_PAGE;
+import static by.milavitsky.horseracing.service.ServiceParameter.RACES_ON_PAGE;
 
 public class RaceService implements RaceServiceInterface {
 
@@ -34,11 +34,11 @@ public class RaceService implements RaceServiceInterface {
 
     @Override
     public List<Race> showAllActive(String page) throws ServiceException {
+        int offset = 0;
+        if (page != null && !page.isEmpty()) {
+            offset = (Integer.parseInt(page) - 1) * RACES_ON_PAGE;
+        }
         try {
-            int offset = 0;
-            if (page != null && !page.isEmpty()) {
-                offset = (Integer.parseInt(page) - 1) * RACES_ON_PAGE;
-            }
             RaceDaoAbstract raceDao = (RaceDaoAbstract) DaoFactory.getInstance().getClass(RaceDaoAbstract.class);
             List<Race> races = raceDao.findActive(RACES_ON_PAGE, offset);
             return races;
@@ -50,17 +50,16 @@ public class RaceService implements RaceServiceInterface {
 
     @Override
     public boolean addRace(Set<Long> horseList, String location, String dateTime) throws ServiceException {
+        if (!RaceValidator.isValidLocation(location) || !RaceValidator.isValidDateTime(dateTime)) {
+            return false;
+        }
         try {
-            if (!RaceValidator.isValidLocation(location) || !RaceValidator.isValidDateTime(dateTime)) {
-                return false;
-            }
             RaceDaoAbstract raceDao = (RaceDaoAbstract) DaoFactory.getInstance().getClass(RaceDaoAbstract.class);
             Race race = new Race();
             race.setDate(LocalDateTime.parse(dateTime));
             race.setHorse(horseList);
             race.setHippodrome(location);
-            raceDao.create(race);
-
+            raceDao.registration(race);
 
                 Cache cache = (Cache) CacheFactory.getInstance().getCache(CacheType.RACES_COUNT);
                 if (cache.containsKey(COUNT_ACTIVE)) {
@@ -89,11 +88,11 @@ public class RaceService implements RaceServiceInterface {
 
     @Override
     public List<Race> showAll(String page) throws ServiceException {
+        int offset = 0;
+        if (page != null && !page.isEmpty()) {
+            offset = (Integer.parseInt(page) - 1) * RACES_ON_PAGE;
+        }
         try {
-            int offset = 0;
-            if (page != null && !page.isEmpty()) {
-                offset = (Integer.parseInt(page) - 1) * RACES_ON_PAGE;
-            }
             RaceDaoAbstract raceDao = (RaceDaoAbstract) DaoFactory.getInstance().getClass(RaceDaoAbstract.class);
             List<Race> races = raceDao.findAll(RACES_ON_PAGE, offset);
             return races;
@@ -145,10 +144,10 @@ public class RaceService implements RaceServiceInterface {
 
     @Override
     public boolean delete(String raceId) throws ServiceException {
+        if (!CommonValidator.isIdValid(raceId)) {
+            return false;
+        }
         try {
-            if (!CommonValidator.isIdValid(raceId)) {
-                return false;
-            }
             Long id = Long.valueOf(raceId);
             RaceDaoAbstract raceDao = (RaceDaoAbstract) DaoFactory.getInstance().getClass(RaceDaoAbstract.class);
             boolean result = TransactionManager.getInstance().deleteRace(id);
@@ -180,10 +179,10 @@ public class RaceService implements RaceServiceInterface {
 
     @Override
     public Race findInfo(String raceId) throws ServiceException {
+        if (!CommonValidator.isIdValid(raceId)) {
+            return new Race();
+        }
         try {
-            if (!CommonValidator.isIdValid(raceId)) {
-                return new Race();
-            }
             Long id = Long.valueOf(raceId);
             RaceDaoAbstract raceDao = (RaceDaoAbstract) DaoFactory.getInstance().getClass(RaceDaoAbstract.class);
             Optional<Race> raceOptional = raceDao.read(id);

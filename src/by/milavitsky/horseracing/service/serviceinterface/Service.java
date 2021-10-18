@@ -1,4 +1,4 @@
-package by.milavitsky.horseracing.service.service_interface;
+package by.milavitsky.horseracing.service.serviceinterface;
 
 /**
  * The marker interface Service.

@@ -10,7 +10,7 @@ public class BCryptService {
          * @return the string
          */
         public static String hashPassword(String password) {
-            return BCrypt.withDefaults().hashToString(12, password.toCharArray());
+            return BCrypt.withDefaults().hashToString(10, password.toCharArray());
         }
 
         /**

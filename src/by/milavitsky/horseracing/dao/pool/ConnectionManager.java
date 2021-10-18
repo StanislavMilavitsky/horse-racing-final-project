@@ -22,14 +22,10 @@ public final class ConnectionManager {
     private static final String USERNAME_KEY = "db.userName";
     private static final String URL_KEY = "db.url";
     private static final String POOL_SIZE_KEY = "db.pool.size";
-    /**
-     * Create blocking deque for pool connection
-     */
+
     private static BlockingQueue<ProxyConnection> pool;
     public static final Integer DEFAULT_POOL_SIZE = 10;
     private static List<Connection> sourceConnections;
-    //private static final int FETCH_SIZE = 10;
-
 
     static {
         loadDriver();
@@ -50,9 +46,6 @@ public final class ConnectionManager {
         }
     }
 
-    /**
-     * Initialization connection pool throw proxy object from reflection
-     */
     private static void initConnectionPool() {
         var poolSize = PropertiesUtil.get(POOL_SIZE_KEY);
         var size = poolSize == null ? DEFAULT_POOL_SIZE : Integer.parseInt(poolSize);
@@ -66,9 +59,7 @@ public final class ConnectionManager {
         }
     }
 
-    /**
-     * get connection from ConnectionManager
-     */
+
     public static ProxyConnection get() throws DaoException {
         try {
             return pool.take();
@@ -77,9 +68,7 @@ public final class ConnectionManager {
         }
     }
 
-    /**
-     * Join in databes with password,login and url
-     */
+
     private static Connection open() {
         try {
             return DriverManager.getConnection(

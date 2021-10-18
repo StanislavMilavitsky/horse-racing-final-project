@@ -1,4 +1,4 @@
-package by.milavitsky.horseracing.dao.dao_abstract;
+package by.milavitsky.horseracing.dao.daoabstract;
 
 import by.milavitsky.horseracing.dao.pool.ProxyConnection;
 import by.milavitsky.horseracing.entity.Bet;
@@ -39,7 +39,7 @@ public abstract class BetDaoAbstract implements Dao<Bet, Long> {
     }
 
     @Override
-    public final Optional<Bet> create(Bet a) {
+    public final Optional<Bet> registration(Bet a) {
         throw new UnsupportedOperationException();
     }
 }

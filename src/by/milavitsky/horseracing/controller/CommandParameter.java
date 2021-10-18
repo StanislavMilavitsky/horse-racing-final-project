@@ -43,7 +43,7 @@ public final class CommandParameter {
      * PAGES
      */
     public static final String PAGE_INDEX = "/index.jsp";
-    public static final String PAGE_REDIRECT_INDEX = "/horse-bets";
+    public static final String PAGE_REDIRECT_INDEX = "/horseracing";
     public static final String PAGE_RACES = "/WEB-INF/pages/races.jsp";
     public static final String PAGE_USERS = "/WEB-INF/pages/users.jsp";
     public static final String PAGE_ADD_RACE = "/WEB-INF/pages/addRace.jsp";
@@ -56,7 +56,7 @@ public final class CommandParameter {
     public static final String PAGE_404 = "/WEB-INF/pages/error/pages-404.jsp";
     public static final String PAGE_403 = "/WEB-INF/pages/error/pages-403.jsp";
     public static final String PAGE_500 = "/WEB-INF/pages/error/pages-500.jsp";
-    public static final String PAGE_START_PREFIX = "http://localhost:8080/hrbets/";
+    public static final String PAGE_START_PREFIX = "http://localhost:8083/horseracing/";
     /**
      * LOCALIZATION
      */
@@ -64,7 +64,6 @@ public final class CommandParameter {
     public static final String LOCALE_LANGUAGE_EN = "en";
     public static final String LOCALE_COUNTRY_RU = "RU";
     public static final String LOCALE_COUNTRY_US = "US";
-   // public static final String FILTER_ENCODING = "encoding";
     /**
      * OTHERS
      */

@@ -1,4 +1,4 @@
-package by.milavitsky.horseracing.dao.dao_abstract;
+package by.milavitsky.horseracing.dao.daoabstract;
 
 import by.milavitsky.horseracing.dao.pool.ProxyConnection;
 import by.milavitsky.horseracing.entity.Result;
@@ -33,7 +33,7 @@ public abstract class ResultDaoAbstract implements Dao<Result, Long> {
     }
 
     @Override
-    public final Optional<Result> create(Result result) {
+    public final Optional<Result> registration(Result result) {
         throw new UnsupportedOperationException();
     }
 }

@@ -7,8 +7,9 @@ import by.milavitsky.horseracing.entity.enums.PermissionEnum;
 import by.milavitsky.horseracing.exception.CommandException;
 import by.milavitsky.horseracing.exception.ServiceException;
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.service_interface.BetServiceInterface;
-import by.milavitsky.horseracing.service.service_interface.RaceServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.BetServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.RaceServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.ResultServiceInterface;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,8 +42,8 @@ public class EnterResultCommand implements Command {
                 return new Router(PAGE_ENTER_RESULT);
             } else {
                 if (isNotEmpty(id)) {
-                    BetServiceInterface betService = (BetServiceInterface) ServiceFactory.getInstance().getClass(BetServiceInterface.class);
-                    betService.enterResult(horseMap, id);
+                    ResultServiceInterface resultService = (ResultServiceInterface) ServiceFactory.getInstance().getClass(ResultServiceInterface.class);
+                    resultService.enterResult(horseMap, id);
                 }
                 Router router = new Router(PAGE_REDIRECT_INDEX);
                 router.redirect();

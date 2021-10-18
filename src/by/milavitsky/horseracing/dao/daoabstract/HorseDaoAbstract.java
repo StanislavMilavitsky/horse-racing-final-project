@@ -1,4 +1,4 @@
-package by.milavitsky.horseracing.dao.dao_abstract;
+package by.milavitsky.horseracing.dao.daoabstract;
 
 import by.milavitsky.horseracing.entity.Horse;
 import by.milavitsky.horseracing.exception.DaoException;
@@ -14,7 +14,7 @@ public abstract class HorseDaoAbstract implements Dao<Horse, Long> {
     public abstract Set<Horse> findByRace(Long raceId) throws DaoException;
 
     @Override
-    public final Optional<Horse> create(Horse horse) throws DaoException {
+    public final Optional<Horse> registration(Horse horse) throws DaoException {
         throw new UnsupportedOperationException();
     }
 
