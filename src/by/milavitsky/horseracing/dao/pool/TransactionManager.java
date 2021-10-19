@@ -1,11 +1,8 @@
 package by.milavitsky.horseracing.dao.pool;
 
 import by.milavitsky.horseracing.dao.DaoFactory;
-import by.milavitsky.horseracing.dao.daoabstract.BetDaoAbstract;
-import by.milavitsky.horseracing.dao.daoabstract.RaceDaoAbstract;
+import by.milavitsky.horseracing.dao.daoabstract.*;
 
-import by.milavitsky.horseracing.dao.daoabstract.ResultDaoAbstract;
-import by.milavitsky.horseracing.dao.daoabstract.UserDaoAbstract;
 import by.milavitsky.horseracing.entity.Bet;
 import by.milavitsky.horseracing.entity.Result;
 import by.milavitsky.horseracing.entity.enums.TotalResultEnum;
@@ -27,6 +24,7 @@ public class TransactionManager {
     private final BetDaoAbstract betDao = (BetDaoAbstract) DaoFactory.getInstance().getClass(BetDaoAbstract.class);
     private final UserDaoAbstract userDao = (UserDaoAbstract) DaoFactory.getInstance().getClass(UserDaoAbstract.class);
     private final ResultDaoAbstract resultDao = (ResultDaoAbstract) DaoFactory.getInstance().getClass(ResultDaoAbstract.class);
+    private final RatioDaoAbstract ratioDao = (RatioDaoAbstract) DaoFactory.getInstance().getClass(RatioDaoAbstract.class);
 
     private TransactionManager() {
     }
@@ -117,7 +115,7 @@ public class TransactionManager {
             List<Bet> bets = betDao.findByRace(connection, id);
             for (Bet bet : bets) {
                 Optional<Result> result = resultDao.findByBets(connection, bet.getId());
-                if (result.get().getTotalResult() != TotalResultEnum.NOT_PROCESSED) {
+                 if (result.get().getTotalResult() != TotalResultEnum.NOT_PROCESSED) {
                     return false;
                 }
             }
@@ -126,10 +124,11 @@ public class TransactionManager {
                 BigDecimal newCash = userCash.add(bet.getAmountBet());
                 userDao.updateCash(connection, newCash, bet.getUserId());
             }
+            boolean ratioBoolean = ratioDao.deleteByRace(connection, id);
             boolean resultBoolean = resultDao.deleteRace(connection, id);
             boolean betBoolean = betDao.deleteByRace(connection, id);
             boolean raceBoolean = raceDao.deleteRace(connection, id);
-            if (!resultBoolean || !betBoolean || !raceBoolean) {
+            if (!resultBoolean || !betBoolean || !raceBoolean || !ratioBoolean) {
                 return false;
             }
             connection.commit();

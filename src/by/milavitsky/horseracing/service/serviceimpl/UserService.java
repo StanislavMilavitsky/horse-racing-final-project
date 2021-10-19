@@ -118,7 +118,11 @@ public class UserService implements UserServiceInterface {
                 offset = (Integer.parseInt(page) - 1) * USERS_ON_PAGE;
             }
             UserDaoAbstract userDao = (UserDaoAbstract) DaoFactory.getInstance().getClass(UserDaoAbstract.class);
-            return userDao.findAll(USERS_ON_PAGE, offset);
+            List<User> users = userDao.findAll(USERS_ON_PAGE, offset);
+            for (User user : users) {
+                setCashRole(user);
+            }
+            return users;
         } catch (DaoException e) {
             logger.error("Show all users exception!", e);
             throw new ServiceException("Show all users service exception!", e);

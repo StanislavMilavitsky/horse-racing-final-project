@@ -27,7 +27,7 @@ public class AddRaceCommand implements Command {
         try {
             String location = request.getParameter(PARAM_LOCATION);
             String date = request.getParameter(PARAM_DATE);
-            Set<Long> horseSet = new HashSet<>();
+            Set<Long> horseSet = new HashSet<>();//todo
             for (int i = 0; i <= 5; i++) {
                 String id = request.getParameter(PARAM_HORSE + i);
                 if (id != null && !id.trim().isEmpty()) {

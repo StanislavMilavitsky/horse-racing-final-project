@@ -9,7 +9,7 @@ import java.util.Optional;
 public abstract class
 RolePermissionsDaoAbstract implements Dao<Role, Long> {
     @Override
-    public Optional<Role> registration(Role a) throws DaoException {
+    public Optional<Role> create(Role a) throws DaoException {
         throw new UnsupportedOperationException();
     }
 

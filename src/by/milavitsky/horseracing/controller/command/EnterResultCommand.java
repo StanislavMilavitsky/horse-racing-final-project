@@ -38,7 +38,7 @@ public class EnterResultCommand implements Command {
                 RaceServiceInterface raceService = (RaceServiceInterface) ServiceFactory.getInstance().getClass(RaceServiceInterface.class);
                 Race race = raceService.findInfo(id);
                 request.setAttribute(ATTR_RACE_INFO, race);
-                //request.setAttribute(ATTR_RACE_SET, race.getHorse());
+                request.setAttribute(ATTR_RACE_SET, race.getHorse());//todo
                 return new Router(PAGE_ENTER_RESULT);
             } else {
                 if (isNotEmpty(id)) {

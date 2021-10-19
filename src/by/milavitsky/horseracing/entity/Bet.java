@@ -22,11 +22,9 @@ public class Bet implements Serializable {
     private BetType betType;
     private Horse horse;
     private Race race;
-    private Long typeId;
 
     public Bet() {
     }
-
 
     public Bet(Long id, BigDecimal amountBet, BigDecimal ratio, Long racesId, String transferStatus,
                LocalDateTime time, Long userId, Long horseId, BetType betType, Horse horse, Race race) {
@@ -41,58 +39,6 @@ public class Bet implements Serializable {
         this.betType = betType;
         this.horse = horse;
         this.race = race;
-    }
-
-    public Bet(Long id, BigDecimal amountBet, BigDecimal ratio, Long racesId, String transferStatus,
-               LocalDateTime time, Long userId, Long horseId, BetType betType) {
-        this.id = id;
-        this.amountBet = amountBet;
-        this.ratio = ratio;
-        this.racesId = racesId;
-        this.transferStatus = transferStatus;
-        this.time = time;
-        this.userId = userId;
-        this.horseId = horseId;
-        this.betType = betType;
-    }
-
-    public Bet(Long id, BigDecimal amountBet, BigDecimal ratio, Long racesId, String transferStatus,
-               LocalDateTime time, Long userId, Long horseId, Horse horse, Race race) {
-        this.id = id;
-        this.amountBet = amountBet;
-        this.ratio = ratio;
-        this.racesId = racesId;
-        this.transferStatus = transferStatus;
-        this.time = time;
-        this.userId = userId;
-        this.horseId = horseId;
-        this.horse = horse;
-        this.race = race;
-
-    }
-
-    public Bet(Long id, BigDecimal amountBet, BigDecimal ratio, Long racesId, String transferStatus,
-               LocalDateTime time, Long userId, Long horseId, Horse horse, Race race, BetType betType) {
-        this.id = id;
-        this.amountBet = amountBet;
-        this.ratio = ratio;
-        this.racesId = racesId;
-        this.transferStatus = transferStatus;
-        this.time = time;
-        this.userId = userId;
-        this.horseId = horseId;
-        this.horse = horse;
-        this.race = race;
-        this.betType = betType;
-
-    }
-
-    public Long getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(Long typeId) {
-        this.typeId = typeId;
     }
 
     public Long getId() {

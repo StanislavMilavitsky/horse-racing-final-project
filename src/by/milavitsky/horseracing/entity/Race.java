@@ -10,28 +10,25 @@ public class  Race implements Serializable {
     private static final long serialVersionUID = 4834209940652886210L;
 
     private Long id;
-    private String raceType;
     private LocalDateTime date;
     private String hippodrome;
     private Set<Long> horse;
     private Long betCount;
-    private BigDecimal betCountCash;
+    private BigDecimal betSum;
 
     public Race() {
     }
 
-    public Race(Long id, String hippodrome, String raceTyp, Set<Long> horse, LocalDateTime date) {
+    public Race(Long id, String hippodrome,Set<Long> horse, LocalDateTime date) {
         this.id = id;
         this.hippodrome = hippodrome;
-        this.raceType = raceTyp;
         this.horse = horse;
         this.date = date;
     }
 
-    public Race(Long id, String hippodrome, String raceType, LocalDateTime date) {
+    public Race(Long id, String hippodrome, LocalDateTime date) {
         this.id = id;
         this.hippodrome = hippodrome;
-        this.raceType = raceType;
         this.date = date;
     }
 
@@ -68,14 +65,6 @@ public class  Race implements Serializable {
         this.hippodrome = hippodrome;
     }
 
-    public String getRaceType() {
-        return raceType;
-    }
-
-    public void setRaceType(String raceType) {
-        this.raceType = raceType;
-    }
-
     public Long getBetCount() {
         return betCount;
     }
@@ -84,12 +73,12 @@ public class  Race implements Serializable {
         this.betCount = betCount;
     }
 
-    public BigDecimal getBetCountCash() {
-        return betCountCash;
+    public BigDecimal getBetSum() {
+        return betSum;
     }
 
-    public void setBetCountCash(BigDecimal betCountCash) {
-        this.betCountCash = betCountCash;
+    public void setBetSum(BigDecimal betSum) {
+        this.betSum = betSum;
     }
 
     @Override
@@ -110,11 +99,10 @@ public class  Race implements Serializable {
         final StringBuilder builder = new StringBuilder(this.getClass().getSimpleName());
         builder.append("id=").append(id);
         builder.append(", hippodromeName='").append(hippodrome);
-        builder.append(", raceTyp='").append(raceType);
         builder.append(", horse='").append(horse);
         builder.append(", date='").append(date);
         builder.append(", betCount='").append(betCount);
-        builder.append(", betCountCash='").append(betCountCash);
+        builder.append(", betCountCash='").append(betSum);
         builder.append('}');
         return builder.toString();
     }

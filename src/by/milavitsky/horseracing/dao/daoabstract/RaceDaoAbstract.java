@@ -17,7 +17,7 @@ public abstract class RaceDaoAbstract implements Dao<Race, Long> {
 
     public abstract List<Race> findAll(int limit, int offset) throws DaoException;
 
-    public abstract Optional<Race> registration(Race race) throws DaoException;
+    public abstract Optional<Race> addRace(Race race) throws DaoException;
 
     public abstract boolean deleteRace(ProxyConnection connection, Long id) throws SQLException;
 
@@ -31,6 +31,11 @@ public abstract class RaceDaoAbstract implements Dao<Race, Long> {
 
     @Override
     public final Optional<Race> update(Race race) throws DaoException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public final Optional<Race> create(Race race) throws DaoException {
         throw new UnsupportedOperationException();
     }
 

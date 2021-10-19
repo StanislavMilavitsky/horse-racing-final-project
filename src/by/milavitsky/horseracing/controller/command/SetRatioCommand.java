@@ -9,6 +9,7 @@ import by.milavitsky.horseracing.exception.ServiceException;
 import by.milavitsky.horseracing.service.ServiceFactory;
 import by.milavitsky.horseracing.service.serviceinterface.BetServiceInterface;
 import by.milavitsky.horseracing.service.serviceinterface.HorseServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.RatioServiceInterface;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,8 +37,8 @@ public class SetRatioCommand implements Command {
                     Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>) object;
                     parameterMap.put(entry.getKey(), entry.getValue()[0]);
                 }
-                BetServiceInterface betService = (BetServiceInterface) ServiceFactory.getInstance().getClass(BetServiceInterface.class);
-                boolean result = betService.addRatios(parameterMap);
+                RatioServiceInterface ratioService = (RatioServiceInterface) ServiceFactory.getInstance().getClass(RatioServiceInterface.class);
+                boolean result = ratioService.addRatios(parameterMap);
                 if (result) {
                     Router router = new Router(PAGE_REDIRECT_INDEX);
                     router.redirect();

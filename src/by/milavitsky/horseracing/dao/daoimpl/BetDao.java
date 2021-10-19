@@ -23,7 +23,7 @@ public class BetDao extends BetDaoAbstract {
     private static final Logger logger = LogManager.getLogger(BetDao.class);
 
     private static final String SHOW_BET_BY_USER_SQL =
-            "SELECT b.id,b.time,r.hippodrome,b.amount_bet,b.ratio,r.race_type,b.horse_id,h.name, bt.name" +
+            "SELECT b.id,b.time,r.hippodrome,b.amount_bet,b.ratio,b.horse_id,h.name, bt.name" +
                     " FROM bets b " +
                     " INNER JOIN races r ON b.races_id = r.id" +
                     " INNER JOIN bets_type bt ON b.bets_type_id = bt.id" +
@@ -35,9 +35,8 @@ public class BetDao extends BetDaoAbstract {
 
     private static final String DELETE_RACE_BET_SQL = "DELETE FROM bets WHERE races_id=?";
 
-    public static final String SELECT_BETS_BY_RACE_SQL = "SELECT b.id, b.amount_bet, b.ratio, ts.name," +
+    public static final String SELECT_BETS_BY_RACE_SQL = "SELECT b.id, b.amount_bet, b.ratio," +
             " b.time, b.user_id, b.horse_id, bt.name FROM bets b" +
-            " INNER JOIN transfer_status ts ON b.transfer_status" +
             " INNER JOIN bets_type bt ON b.bets_type_id" +
             " WHERE races_id = ?;";
     private static final String FIND_RATIO_LIST_SQL = "SELECT b.horse_id, b.ratio, bt.name FROM bets b INNER JOIN bets_type bt ON b.bets_type_id = bt.id WHERE races_id = ?;";
@@ -60,20 +59,18 @@ public class BetDao extends BetDaoAbstract {
                 Race race = new Race();
                 horse.setName(resultSet.getString("h.name"));
                 race.setHippodrome(resultSet.getString("r.hippodrome"));
-                race.setRaceType(resultSet.getString("r.race_typ"));
-                bet = new Bet(
-                        resultSet.getLong("id"),
-                        resultSet.getBigDecimal("amount_bet"), //todo
-                        resultSet.getBigDecimal("ratio"),
-                        resultSet.getLong("races_id"),
-                        resultSet.getString("ts.name"),
-                        resultSet.getObject("time", Timestamp.class).toLocalDateTime(),
-                        resultSet.getLong("user_id"),
-                        resultSet.getLong("horse_id"),
-                        horse,
-                        race,
-                        BetType.valueOf(resultSet.getString("bt.name").toUpperCase())
-                );
+                bet = new Bet();
+                        bet.setId(resultSet.getLong("id"));
+                        bet.setAmountBet(resultSet.getBigDecimal("amount_bet")); //todo
+                        bet.setRatio(resultSet.getBigDecimal("ratio"));
+                        bet.setRacesId(resultSet.getLong("races_id"));
+                        bet.setBetType(BetType.valueOf(resultSet.getString("bt.name").toUpperCase()));
+                        bet.setTime(resultSet.getObject("time", Timestamp.class).toLocalDateTime());
+                        bet.setUserId(resultSet.getLong("user_id"));
+                        bet.setHorseId(resultSet.getLong("horse_id"));
+                        bet.setHorse(horse);
+                        bet.setRace(race);
+                        bet.setTransferStatus(resultSet.getString("transfer_status"));
                 bets.add(bet);
             }
             return bets;
@@ -90,42 +87,21 @@ public class BetDao extends BetDaoAbstract {
         ResultSet resultSet = statement.executeQuery();
         List<Bet> bets = new ArrayList<>();
         while (resultSet.next()) {
-            Bet bet = new Bet(
-                    resultSet.getLong("id"),
-                    resultSet.getBigDecimal("amount_bet"),
-                    resultSet.getBigDecimal("ratio"),
-                    raceId,
-                    resultSet.getString("ts.name"),
-                    resultSet.getObject("time", Timestamp.class).toLocalDateTime(),
-                    resultSet.getLong("user_id"),
-                    resultSet.getLong("horse_id"),
-                    BetType.valueOf(resultSet.getString("bt.name").toUpperCase())
+            Bet bet = new Bet();
+                    bet.setId(resultSet.getLong("id"));
+                    bet.setAmountBet(resultSet.getBigDecimal("amount_bet"));
+                    bet.setRatio(resultSet.getBigDecimal("ratio"));
+                    bet.setRacesId(raceId);
+                    bet.setBetType(BetType.valueOf(resultSet.getString("bet_type")));
+                    bet.setTime(resultSet.getObject("time", Timestamp.class).toLocalDateTime());
+                    bet.setUserId(resultSet.getLong("user_id"));
+                    bet.setHorseId(resultSet.getLong("horse_id"));
+                    bet.setBetType(BetType.valueOf(resultSet.getString("bt.name").toUpperCase()));
 
-            );
+
             bets.add(bet);
         }
         return bets;
-    }
-
-    @Override
-    public List<Bet> findByRaceRatio(Long raceId) throws DaoException {
-        List<Bet> ratioList = new ArrayList<>();
-        try (var connection = ConnectionManager.get();
-             var statement = connection.prepareStatement(FIND_RATIO_LIST_SQL)) {
-            statement.setLong(1, raceId);
-            var resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Bet bet = new Bet();
-                bet.setHorseId(resultSet.getLong("horse_id"));
-                bet.setBetType(BetType.valueOf(resultSet.getString("bt.name").toUpperCase()));
-                bet.setRatio(resultSet.getBigDecimal("ratio"));
-                ratioList.add(bet);
-            }
-            return ratioList;
-        } catch (SQLException e) {
-            logger.error("Find ratios error!", e);
-            throw new DaoException("Find ratios error!", e);
-        }
     }
 
     @Override
@@ -160,25 +136,6 @@ public class BetDao extends BetDaoAbstract {
         }
     }
 
-
-    @Override
-    public boolean setRatios(Set<Bet> betSet) throws DaoException {
-        try (var connection = ConnectionManager.get();
-             var statement = connection.prepareStatement(ADD_RATIO_SQL)) {
-            for (Bet bet : betSet) {
-                statement.setLong(1, bet.getRacesId());
-                statement.setLong(2, bet.getHorseId());
-                statement.setLong(3, bet.getTypeId());
-                statement.setBigDecimal(4, bet.getRatio());
-                statement.addBatch();
-            }
-            int[] executeBatch = statement.executeBatch();
-            return executeBatch.length > 0;
-        } catch (SQLException e) {
-            logger.error("Set ratios error!", e);
-            throw new DaoException("Set ratios error!", e);
-        }
-    }
 
     private static class BetDaoHolder {
         private static final BetDao HOLDER_INSTANCE = new BetDao();

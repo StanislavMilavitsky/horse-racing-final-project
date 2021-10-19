@@ -13,15 +13,11 @@ public abstract class BetDaoAbstract implements Dao<Bet, Long> {
 
     public abstract List<Bet> findByRace(ProxyConnection connection, Long raceId) throws SQLException;
 
-    public abstract List<Bet> findByRaceRatio(Long raceId) throws DaoException;
-
     public abstract boolean deleteByRace(ProxyConnection connection, Long raceId) throws SQLException;
 
     public abstract  Bet create(ProxyConnection connection, Bet bet) throws DaoException;
 
     public abstract List<Bet> findByUser(Long userId) throws DaoException;
-
-    public abstract boolean setRatios(Set<Bet> ratioSet) throws DaoException;
 
     @Override
     public final Optional<Bet> read(Long id) {
@@ -39,7 +35,7 @@ public abstract class BetDaoAbstract implements Dao<Bet, Long> {
     }
 
     @Override
-    public final Optional<Bet> registration(Bet a) {
+    public final Optional<Bet> create(Bet bet) throws DaoException {
         throw new UnsupportedOperationException();
     }
 }

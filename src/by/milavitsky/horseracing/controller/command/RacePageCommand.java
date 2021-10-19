@@ -2,14 +2,14 @@ package by.milavitsky.horseracing.controller.command;
 
 import by.milavitsky.horseracing.controller.Command;
 import by.milavitsky.horseracing.controller.Router;
-import by.milavitsky.horseracing.entity.Bet;
 import by.milavitsky.horseracing.entity.Horse;
 import by.milavitsky.horseracing.entity.enums.PermissionEnum;
+import by.milavitsky.horseracing.entity.enums.Ratio;
 import by.milavitsky.horseracing.exception.CommandException;
 import by.milavitsky.horseracing.exception.ServiceException;
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.serviceinterface.BetServiceInterface;
 import by.milavitsky.horseracing.service.serviceinterface.HorseServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.RatioServiceInterface;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,8 +31,8 @@ public class RacePageCommand implements Command {
             HorseServiceInterface horseService = (HorseServiceInterface) ServiceFactory.getInstance().getClass(HorseServiceInterface.class);
             Set<Horse> horses = horseService.showByRace(raceId);
             request.setAttribute(ATTR_RACE_SET, horses);
-            BetServiceInterface betService = (BetServiceInterface) ServiceFactory.getInstance().getClass(BetServiceInterface.class);
-            List<Bet> ratios = betService.findRatioByRaceId(raceId);
+            RatioServiceInterface ratioService = (RatioServiceInterface) ServiceFactory.getInstance().getClass(RatioServiceInterface.class);
+            List<Ratio> ratios = ratioService.findRatio(raceId);
             request.setAttribute(ATTR_RATIO_LIST, ratios);
             return new Router(PAGE_RACE);
         } catch (ServiceException e) {

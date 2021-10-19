@@ -90,63 +90,6 @@ public class BetService implements BetServiceInterface {
         }
     }
 
-    @Override
-    public List<Bet> findRatioByRaceId(String raceId) throws ServiceException {
-        if (!CommonValidator.isIdValid(raceId)) {
-            return new ArrayList<>();
-        }
-        try {
-            Long id = Long.valueOf(raceId);
-            BetDaoAbstract betDao = (BetDaoAbstract) DaoFactory.getInstance().getClass(BetDaoAbstract.class);
-            List<Bet> bet = betDao.findByRaceRatio(id);
-            return bet;
-        } catch (DaoException e) {
-            logger.error("Find ratio list fail!", e);
-            throw new ServiceException("Find ratio list fail!", e);
-        }
-    }
-
-    @Override
-    public boolean addRatios(Map<String, String> parameterMap) throws ServiceException {
-        try {
-            Set<Bet> betSet = new HashSet<>();
-            Long raceId = 0L;
-            for (Map.Entry<String, String> entry : parameterMap.entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue();
-                if (!BetValidator.isMapKeyValid(key) || !BetValidator.isMapValueValid(value)) {
-                    continue;
-                }
-                String[] keys = key.split(MAP_KEY_DELIMITER);
-                raceId = Long.parseLong(keys[0]);
-                Long horseId = Long.parseLong(keys[1]);
-                Long typeId = (long) BetType.valueOf(keys[2].toUpperCase()).ordinal();
-                typeId++;
-                BigDecimal ratio = new BigDecimal(value);
-                Bet bet = new Bet();
-                bet.setRacesId(raceId);
-                bet.setHorseId(horseId);
-                bet.setTypeId(typeId);
-                bet.setRatio(ratio);
-                betSet.add(bet);
-            }
-            if (betSet.isEmpty() || raceId == 0L) {
-                return false;
-            }
-            HorseServiceInterface horseService = (HorseServiceInterface) ServiceFactory.getInstance().getClass(HorseServiceInterface.class);
-            Set<Horse> horses = horseService.showByRace(raceId.toString());
-            if (betSet.size() != horses.size() * TYPE_COUNT) {
-                return false;
-            }
-
-            BetDaoAbstract betDao = (BetDaoAbstract) DaoFactory.getInstance().getClass(BetDaoAbstract.class);
-            boolean result = betDao.setRatios(betSet);
-            return result;
-        } catch (DaoException e) {
-            logger.error("Set ratios fail!", e);
-            throw new ServiceException("Set ratios fail!", e);
-        }
-    }
     private static class BetServiceHolder{
         private static final BetService HOLDER_INSTANCE = new BetService();
     }

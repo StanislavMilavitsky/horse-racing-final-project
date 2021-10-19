@@ -14,7 +14,7 @@ public abstract class HorseDaoAbstract implements Dao<Horse, Long> {
     public abstract Set<Horse> findByRace(Long raceId) throws DaoException;
 
     @Override
-    public final Optional<Horse> registration(Horse horse) throws DaoException {
+    public final Optional<Horse> create(Horse horse) throws DaoException {
         throw new UnsupportedOperationException();
     }
 

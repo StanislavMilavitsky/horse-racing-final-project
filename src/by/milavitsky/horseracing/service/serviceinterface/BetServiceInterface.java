@@ -13,7 +13,4 @@ public interface BetServiceInterface extends Service {
 
     boolean add(String info, String betCash, BigDecimal userCash, Long userId) throws ServiceException;
 
-    List<Bet> findRatioByRaceId(String raceId) throws ServiceException;
-
-    boolean addRatios(Map<String, String> parameterMap) throws ServiceException;
 }

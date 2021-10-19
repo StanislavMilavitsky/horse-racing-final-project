@@ -22,7 +22,7 @@
                         <div class="form-group row">
                             <div class="col-sm-3"><fmt:message key="label.location"/>
                             </div>
-                            <div class="col-sm-9 text-secondary">${raceInfo.location}</div>
+                            <div class="col-sm-9 text-secondary">${raceInfo.hippodrome}</div>
                         </div>
                         <hr>
                         <div class="form-group row">

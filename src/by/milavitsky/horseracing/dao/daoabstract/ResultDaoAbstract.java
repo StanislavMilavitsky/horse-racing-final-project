@@ -33,7 +33,7 @@ public abstract class ResultDaoAbstract implements Dao<Result, Long> {
     }
 
     @Override
-    public final Optional<Result> registration(Result result) {
+    public final Optional<Result> create(Result result) {
         throw new UnsupportedOperationException();
     }
 }

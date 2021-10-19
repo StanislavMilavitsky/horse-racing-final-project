@@ -1,5 +1,6 @@
 package by.milavitsky.horseracing.dao.daoabstract;
 
+import by.milavitsky.horseracing.entity.enums.Ratio;
 import by.milavitsky.horseracing.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +12,7 @@ public interface Dao <T, K extends Serializable> {
 
     Logger logger = LogManager.getLogger(Dao.class);
 
-    Optional<T> registration(T a) throws DaoException;
+    Optional<T> create(T a) throws DaoException;
 
     Optional<T> read(K id) throws DaoException;
 

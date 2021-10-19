@@ -17,7 +17,8 @@ public class ServiceFactory {
                 BetServiceInterface.class, BetService.getInstance(),
                 RaceServiceInterface.class, RaceService.getInstance(),
                 HorseServiceInterface.class, HorseService.getInstance(),
-                ResultServiceInterface.class, ResultService.getInstance());
+                ResultServiceInterface.class, ResultService.getInstance(),
+                RatioServiceInterface.class, RatioService.getInstance());
     }
 
     /**

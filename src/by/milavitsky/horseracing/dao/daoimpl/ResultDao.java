@@ -6,9 +6,6 @@ import by.milavitsky.horseracing.entity.Result;
 
 import by.milavitsky.horseracing.entity.enums.TotalResultEnum;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,16 +13,12 @@ import java.util.Optional;
 
 public class ResultDao extends ResultDaoAbstract {
 
-    private static final Logger logger = LogManager.getLogger(ResultDao.class);
-
     private ResultDao() {
     }
 
-    private static final String UPDATE_TOTAL_RESULT_SQL = "UPDATE results SET total_id=? WHERE bets_id=?";
+    private static final String UPDATE_TOTAL_RESULT_SQL = "UPDATE results SET total=? WHERE bets_id=?";
 
-    public static final String FIND_BY_BETS_SQL = "SELECT wining_amount, users_id, total_id FROM results  WHERE bets_id = ?;";
-
-    public static final String CREAT_RESULT_SQL = "INSERT INTO results (users_id, wining_amount, bets_id, total) VALUES (?, ?, ?, ?);";
+    public static final String FIND_BY_BETS_SQL = "SELECT wining_amount, users_id, total FROM results  WHERE bets_id = ?;";
 
     public static final String DELETE_RACE_SQL = "DELETE FROM results WHERE bets_id = (SELECT bets_id FROM bets WHERE races_id = ?);";
 
@@ -49,21 +42,21 @@ public class ResultDao extends ResultDaoAbstract {
             result = new Result();
             result.setUserId(resultSet.getLong("users_id"));
             result.setWiningAmount(resultSet.getBigDecimal("wining_amount"));
-            result.setBetsId(resultSet.getLong("bets_id"));
+            result.setBetsId(id);
             result.setTotalResult(TotalResultEnum.valueOf(resultSet.getString("total").toUpperCase()));
 
             if (generatedKeys.next()) {
-                result.setId(generatedKeys.getLong("id"));
+                result.setId(generatedKeys.getLong(1));
             }
         }
 
-        return Optional.ofNullable(result);//todo
+        return Optional.of(result);//todo
     }
 
     @Override
     public boolean updateTotalResult(ProxyConnection connection, TotalResultEnum result, Long betId) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(UPDATE_TOTAL_RESULT_SQL);
-        statement.setInt(1, result.ordinal());
+        statement.setString(1, result.name().toLowerCase());
         statement.setLong(2, betId);
         int rowsEffected = statement.executeUpdate();
         return rowsEffected > 0;

@@ -19,23 +19,23 @@ public class RaceDao extends RaceDaoAbstract {
     private RaceDao(){
     }
 
-    private static final String SHOW_ALL_RACES_ACTIVE_SQL = "SELECT id, hippodrome, time, race_type FROM races " +
+    private static final String SHOW_ALL_RACES_ACTIVE_SQL = "SELECT id, hippodrome, time FROM races " +
             "WHERE time > CURRENT_TIMESTAMP ORDER BY time limit ? offset ?;";;
 
 
     private static final String SELECT_RACE_SQL = "SELECT r.hippodrome,r.time,COUNT(b.id),SUM(b.amount_bet) FROM races r" +
             " LEFT JOIN bets b ON r.id = b.races_id WHERE r.id=?;";
 
-    public static final String SHOW_ALL_RACES_SQL = "SELECT id, hippodrome, time, race_type FROM races " +
+    public static final String SHOW_ALL_RACES_SQL = "SELECT id, hippodrome, time FROM races " +
             "ORDER BY time limit ? offset ?;";
 
-    private static final String ADD_RACE_RESULT_SQL = "UPDATE races_has_horses SET place = ? WHERE rases_id = ? AND horses_id = ?";
+    private static final String ADD_RACE_RESULT_SQL = "UPDATE races_has_horses SET place = ? WHERE races_id = ? AND horses_id = ?";
 
-    public static final String ADD_RACE_SQL = "INSERT INTO races (race_type, time, hippodrome) VALUES (?, ?, ?);";
+    public static final String ADD_RACE_SQL = "INSERT INTO races (time, hippodrome) VALUES (?, ?);";
 
-    public static final String ADD_HORSE_RACE_SQL = "INSERT INTO races_has_horses (rases_id, horses_id) VALUES (?, ?);";
+    public static final String ADD_HORSE_RACE_SQL = "INSERT INTO races_has_horses (races_id, horses_id) VALUES (?, ?);";
 
-    public static final String RACE_HORSES_BY_ID_SQL = "SELECT r.race_typ, r.hippodromes_name, rh.horses_id FROM races r INNER JOIN races_has_horses rh WHERE r.id = ?";
+    public static final String RACE_HORSES_BY_ID_SQL = "SELECT r.hippodrome, rh.horses_id FROM races r INNER JOIN races_has_horses rh WHERE r.id = ?";
 
     public static final String COUNT_ACTUAL_RACES_SQL = "SELECT count(id) FROM races WHERE time > CURRENT_TIMESTAMP;";
 
@@ -43,7 +43,7 @@ public class RaceDao extends RaceDaoAbstract {
 
     private static final String DELETE_RACE_SQL = "DELETE FROM races WHERE id = ?;";
 
-    private static final String DELETE_RACE_HORSES_SQL = "DELETE FROM races_has_horses WHERE rases_id = ?;";
+    private static final String DELETE_RACE_HORSES_SQL = "DELETE FROM races_has_horses WHERE races_id = ?;";
 
     @Override
     public List<Race> findActive(int limit, int offset) throws DaoException {
@@ -56,27 +56,25 @@ public class RaceDao extends RaceDaoAbstract {
     }
 
     @Override
-    public Optional<Race> registration(Race race) throws DaoException {
+    public Optional<Race> addRace(Race race) throws DaoException {
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(ADD_RACE_SQL, Statement.RETURN_GENERATED_KEYS);
-             var preparedStatementHorse = connection.prepareStatement(ADD_HORSE_RACE_SQL);) {
-            preparedStatement.setString(1, race.getRaceType());
-            preparedStatement.setObject(2, race.getDate());
-            preparedStatement.setString(3, race.getHippodrome());
+             var statement = connection.prepareStatement(ADD_HORSE_RACE_SQL)){
+            preparedStatement.setString(1, race.getDate().toString());
+            preparedStatement.setString(2, race.getHippodrome());
             preparedStatement.executeUpdate();
             var generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                race.setId(generatedKeys.getLong("id"));
-                Set<Long> horses = race.getHorse();
-                Iterator<Long> iterator = horses.iterator();
-               if(iterator.hasNext()){
-                   preparedStatementHorse.setLong(1, generatedKeys.getLong("id"));
-                   preparedStatementHorse.setLong(2, iterator.next());
-               }
-
-                preparedStatementHorse.executeUpdate();
+                race.setId(generatedKeys.getLong(1));
             }
-            return Optional.ofNullable(race);
+                for (long horse : race.getHorse()) {//todo
+                    statement.setLong(1, race.getId());
+                    statement.setLong(2, horse);
+                    statement.executeUpdate();
+                }
+
+
+            return Optional.of(race);
         } catch (SQLException e) {
             logger.error("Create race exception!", e);
             throw new DaoException("Create race exception!", e);
@@ -124,10 +122,10 @@ public class RaceDao extends RaceDaoAbstract {
                 race.setHippodrome(resultSet.getString("hippodrome"));
                 race.setDate(resultSet.getTimestamp("time").toLocalDateTime());
                 race.setBetCount(resultSet.getLong("COUNT(b.id)"));
-                race.setBetCountCash(resultSet.getBigDecimal("SUM(b.amount_bet)"));
+                race.setBetSum(resultSet.getBigDecimal("SUM(b.amount_bet)"));
                 race.setHorse(horses);
             }
-            return Optional.ofNullable(race);
+            return Optional.of(race);
         } catch (SQLException e) {
             logger.error("Read race exception!", e);
             throw new DaoException("Read race exception!", e);
@@ -168,9 +166,8 @@ public class RaceDao extends RaceDaoAbstract {
                 Long id = resultSet.getLong("id");
                 String hippodrome = resultSet.getString("hippodrome");
                 LocalDateTime date = resultSet.getTimestamp("time").toLocalDateTime();
-                String raceType = resultSet.getString("race_type");
 
-                races.add(new Race(id, hippodrome, raceType, date));
+                races.add(new Race(id, hippodrome, date));
             }
             return races;
         } catch (SQLException e) {

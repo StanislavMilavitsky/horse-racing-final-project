@@ -59,7 +59,7 @@ public class RaceService implements RaceServiceInterface {
             race.setDate(LocalDateTime.parse(dateTime));
             race.setHorse(horseList);
             race.setHippodrome(location);
-            raceDao.registration(race);
+            raceDao.addRace(race);
 
                 Cache cache = (Cache) CacheFactory.getInstance().getCache(CacheType.RACES_COUNT);
                 if (cache.containsKey(COUNT_ACTIVE)) {

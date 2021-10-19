@@ -16,6 +16,7 @@ public class DaoFactory {
                 ResultDaoAbstract.class, ResultDao.getInstance(),
                 RaceDaoAbstract.class, RaceDao.getInstance(),
                 HorseDaoAbstract.class, HorseDao.getInstance(),
+        RatioDaoAbstract.class, RatioDao.getInstance(),
         RolePermissionsDaoAbstract.class, RolePermissionDao.getInstance());
     }
 
