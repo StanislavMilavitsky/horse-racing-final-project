@@ -2,6 +2,6 @@ package by.milavitsky.horseracing.entity.enums;
 
 public enum TotalResultEnum {
     WIN,
-    LOOSE,
+    LOSE,
     NOT_PROCESSED
 }

@@ -8,6 +8,7 @@ import by.milavitsky.horseracing.entity.Bet;
 import by.milavitsky.horseracing.entity.Horse;
 import by.milavitsky.horseracing.entity.Race;
 import by.milavitsky.horseracing.entity.enums.BetType;
+import by.milavitsky.horseracing.entity.enums.TotalResultEnum;
 import by.milavitsky.horseracing.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,14 +17,14 @@ import org.apache.logging.log4j.Logger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 
 public class BetDao extends BetDaoAbstract {
     private static final Logger logger = LogManager.getLogger(BetDao.class);
 
     private static final String SHOW_BET_BY_USER_SQL =
-            "SELECT b.id,b.time,r.hippodrome,b.amount_bet,b.ratio,b.horse_id,h.name, bt.name" +
+            "SELECT b.id,b.time,r.hippodrome,b.amount_bet,b.ratio,b.horse_id,h.name, bt.name, b.races_id, b.transfer_status, b.total_result" +
                     " FROM bets b " +
                     " INNER JOIN races r ON b.races_id = r.id" +
                     " INNER JOIN bets_type bt ON b.bets_type_id = bt.id" +
@@ -39,9 +40,8 @@ public class BetDao extends BetDaoAbstract {
             " b.time, b.user_id, b.horse_id, bt.name FROM bets b" +
             " INNER JOIN bets_type bt ON b.bets_type_id" +
             " WHERE races_id = ?;";
-    private static final String FIND_RATIO_LIST_SQL = "SELECT b.horse_id, b.ratio, bt.name FROM bets b INNER JOIN bets_type bt ON b.bets_type_id = bt.id WHERE races_id = ?;";
 
-    private static final String ADD_RATIO_SQL = "INSERT INTO bets(races_id, horse_id, bets_type_id, ratio) VALUES (?, ?, ?, ?);";
+    private static final String UPDATE_TOTAL_RESULT_SQL = "UPDATE bets SET total_result=? WHERE id=?";
 
     private BetDao() {
     }
@@ -53,24 +53,25 @@ public class BetDao extends BetDaoAbstract {
             preparedStatement.setLong(1, userId);
             var resultSet = preparedStatement.executeQuery();
             Bet bet;
-            List<Bet> bets = null;
+            List<Bet> bets = new ArrayList<>();
             while (resultSet.next()) {
                 Horse horse = new Horse();
                 Race race = new Race();
                 horse.setName(resultSet.getString("h.name"));
                 race.setHippodrome(resultSet.getString("r.hippodrome"));
                 bet = new Bet();
-                        bet.setId(resultSet.getLong("id"));
-                        bet.setAmountBet(resultSet.getBigDecimal("amount_bet")); //todo
-                        bet.setRatio(resultSet.getBigDecimal("ratio"));
-                        bet.setRacesId(resultSet.getLong("races_id"));
+                        bet.setId(resultSet.getLong("b.id"));
+                        bet.setAmountBet(resultSet.getBigDecimal("b.amount_bet")); //todo
+                        bet.setRatio(resultSet.getBigDecimal("b.ratio"));
+                        bet.setRacesId(resultSet.getLong("b.races_id"));
                         bet.setBetType(BetType.valueOf(resultSet.getString("bt.name").toUpperCase()));
-                        bet.setTime(resultSet.getObject("time", Timestamp.class).toLocalDateTime());
-                        bet.setUserId(resultSet.getLong("user_id"));
-                        bet.setHorseId(resultSet.getLong("horse_id"));
+                        bet.setDate(resultSet.getObject("b.time", Timestamp.class).toLocalDateTime());
+                        bet.setUserId(userId);
+                        bet.setHorseId(resultSet.getLong("b.horse_id"));
                         bet.setHorse(horse);
                         bet.setRace(race);
-                        bet.setTransferStatus(resultSet.getString("transfer_status"));
+                        bet.setTransferStatus(resultSet.getString("b.transfer_status"));
+                        bet.setResultStatus(TotalResultEnum.valueOf(resultSet.getString("b.total_result").toUpperCase()));
                 bets.add(bet);
             }
             return bets;
@@ -92,8 +93,7 @@ public class BetDao extends BetDaoAbstract {
                     bet.setAmountBet(resultSet.getBigDecimal("amount_bet"));
                     bet.setRatio(resultSet.getBigDecimal("ratio"));
                     bet.setRacesId(raceId);
-                    bet.setBetType(BetType.valueOf(resultSet.getString("bet_type")));
-                    bet.setTime(resultSet.getObject("time", Timestamp.class).toLocalDateTime());
+                    bet.setDate(resultSet.getObject("time", Timestamp.class).toLocalDateTime());
                     bet.setUserId(resultSet.getLong("user_id"));
                     bet.setHorseId(resultSet.getLong("horse_id"));
                     bet.setBetType(BetType.valueOf(resultSet.getString("bt.name").toUpperCase()));
@@ -113,7 +113,7 @@ public class BetDao extends BetDaoAbstract {
     }
 
     @Override
-    public Bet create(ProxyConnection connection, Bet bet) throws DaoException {
+    public Optional<Bet> create(ProxyConnection connection, Bet bet) throws DaoException {
         try (var preparedStatement = connection.prepareStatement(ADD_BET_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setBigDecimal(1, bet.getAmountBet());
             preparedStatement.setBigDecimal(2, bet.getRatio());
@@ -123,17 +123,27 @@ public class BetDao extends BetDaoAbstract {
             preparedStatement.setLong(6, bet.getHorseId());
             preparedStatement.setLong(7, bet.getBetType().ordinal() + 1L);
 
-            preparedStatement.executeUpdate();
+            int rowsEffected  = preparedStatement.executeUpdate();
 
             var generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                bet.setId(generatedKeys.getLong("id"));
+                bet.setId(generatedKeys.getLong(1));
             }
-            return bet;//todo
+
+            return rowsEffected  > 0 ? Optional.of(bet) : Optional.empty();
         } catch (SQLException e) {
             logger.fatal("Cant create bet!", e);
             throw new DaoException(e);
         }
+    }
+
+    @Override
+    public boolean updateTotalResult(ProxyConnection connection, TotalResultEnum result, Long betId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(UPDATE_TOTAL_RESULT_SQL);
+        statement.setString(1, result.name().toLowerCase());
+        statement.setLong(2, betId);
+        int rowsEffected = statement.executeUpdate();
+        return rowsEffected > 0;
     }
 
 

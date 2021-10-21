@@ -49,21 +49,21 @@
                         <tr>
                             <td>${count.index+1} </td>
                             <c:choose>
-                                <c:when test="${bet.status=='NOT_PROCESSED'}">
+                                <c:when test="${bet.resultStatus=='NOT_PROCESSED'}">
                                     <td bgcolor="#C9D6D3"><fmt:message key="label.profile.bet.processing"/></td>
                                 </c:when>
-                                <c:when test="${bet.status=='WIN'}">
+                                <c:when test="${bet.resultStatus=='WIN'}">
                                     <td bgcolor="#8CD687"><fmt:message key="label.profile.bet.win"/></td>
                                 </c:when>
-                                <c:when test="${bet.status=='LOSE'}">
+                                <c:when test="${bet.resultStatus=='LOSE'}">
                                     <td bgcolor="#FC603E"><fmt:message key="label.profile.bet.lose"/></td>
                                 </c:when>
                             </c:choose>
                             <td><fld:format-date dateTime="${bet.date}"/></td>
-                            <td>${bet.race.location}</td>
-                            <td>${bet.cash}</td>
+                            <td>${bet.race.hippodrome}</td>
+                            <td>${bet.amountBet}</td>
                             <td>${bet.ratio}</td>
-                            <td>${bet.type}</td>
+                            <td>${bet.betType}</td>
                             <td>${bet.horse.name}</td>
                         </tr>
                     </c:forEach>

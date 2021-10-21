@@ -31,7 +31,7 @@ public class BetCommand implements Command {
                     HttpSession session = request.getSession();
                     User user = (User) session.getAttribute(ATTR_USER_AUTH);
                     BetServiceInterface betService = (BetServiceInterface) ServiceFactory.getInstance().getClass(BetServiceInterface.class);
-                    boolean result = betService.add(info, cash, user.getCash(), user.getId());
+                    boolean result = betService.addBet(info, cash, user.getCash(), user.getId());
                     if (result) {
                         BigDecimal userCash = user.getCash();
                         BigDecimal newUserCash = userCash.subtract(new BigDecimal(cash));

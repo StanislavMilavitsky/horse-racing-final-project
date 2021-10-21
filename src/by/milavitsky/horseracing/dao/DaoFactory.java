@@ -13,7 +13,6 @@ public class DaoFactory {
         factory = Map.of(
                 UserDaoAbstract.class, UserDao.getInstance(),
                 BetDaoAbstract.class, BetDao.getInstance(),
-                ResultDaoAbstract.class, ResultDao.getInstance(),
                 RaceDaoAbstract.class, RaceDao.getInstance(),
                 HorseDaoAbstract.class, HorseDao.getInstance(),
         RatioDaoAbstract.class, RatioDao.getInstance(),

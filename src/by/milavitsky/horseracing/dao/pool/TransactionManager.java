@@ -4,7 +4,6 @@ import by.milavitsky.horseracing.dao.DaoFactory;
 import by.milavitsky.horseracing.dao.daoabstract.*;
 
 import by.milavitsky.horseracing.entity.Bet;
-import by.milavitsky.horseracing.entity.Result;
 import by.milavitsky.horseracing.entity.enums.TotalResultEnum;
 import by.milavitsky.horseracing.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +22,6 @@ public class TransactionManager {
     private final RaceDaoAbstract raceDao = (RaceDaoAbstract) DaoFactory.getInstance().getClass(RaceDaoAbstract.class);
     private final BetDaoAbstract betDao = (BetDaoAbstract) DaoFactory.getInstance().getClass(BetDaoAbstract.class);
     private final UserDaoAbstract userDao = (UserDaoAbstract) DaoFactory.getInstance().getClass(UserDaoAbstract.class);
-    private final ResultDaoAbstract resultDao = (ResultDaoAbstract) DaoFactory.getInstance().getClass(ResultDaoAbstract.class);
     private final RatioDaoAbstract ratioDao = (RatioDaoAbstract) DaoFactory.getInstance().getClass(RatioDaoAbstract.class);
 
     private TransactionManager() {
@@ -67,8 +65,8 @@ public class TransactionManager {
                 if (!isUpdateCash) {
                     throw new SQLException("User cash not update!");
                 }
-                TotalResultEnum result = isWin ? TotalResultEnum.WIN : TotalResultEnum.LOOSE;
-                boolean isUpdateResult = resultDao.updateTotalResult(connection, result, bet.getId());
+                TotalResultEnum result = isWin ? TotalResultEnum.WIN : TotalResultEnum.LOSE;
+                boolean isUpdateResult = betDao.updateTotalResult(connection, result, bet.getId());
                 if (!isUpdateResult) {
                     throw new SQLException("Total result not update!");
                 }
@@ -92,7 +90,10 @@ public class TransactionManager {
             if (bet.getAmountBet().compareTo(cash) > 0) {
                 return Optional.empty();
             }
-            Bet betDB = betDao.create(connection, bet);//todo
+            Optional<Bet> betDB = betDao.create(connection, bet);
+            if (betDB.isEmpty()) {
+                return Optional.empty();
+            }
 
             BigDecimal newCash = cash.subtract(bet.getAmountBet());
             boolean result = userDao.updateCash(connection, newCash, bet.getUserId());
@@ -114,8 +115,7 @@ public class TransactionManager {
             connection.setAutoCommit(false);
             List<Bet> bets = betDao.findByRace(connection, id);
             for (Bet bet : bets) {
-                Optional<Result> result = resultDao.findByBets(connection, bet.getId());
-                 if (result.get().getTotalResult() != TotalResultEnum.NOT_PROCESSED) {
+                if (bet.getResultStatus() == TotalResultEnum.LOSE || bet.getResultStatus() == TotalResultEnum.WIN) {
                     return false;
                 }
             }
@@ -125,10 +125,9 @@ public class TransactionManager {
                 userDao.updateCash(connection, newCash, bet.getUserId());
             }
             boolean ratioBoolean = ratioDao.deleteByRace(connection, id);
-            boolean resultBoolean = resultDao.deleteRace(connection, id);
             boolean betBoolean = betDao.deleteByRace(connection, id);
             boolean raceBoolean = raceDao.deleteRace(connection, id);
-            if (!resultBoolean || !betBoolean || !raceBoolean || !ratioBoolean) {
+            if (!betBoolean || !raceBoolean || !ratioBoolean) {
                 return false;
             }
             connection.commit();

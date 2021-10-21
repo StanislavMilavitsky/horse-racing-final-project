@@ -35,8 +35,6 @@ public class RaceDao extends RaceDaoAbstract {
 
     public static final String ADD_HORSE_RACE_SQL = "INSERT INTO races_has_horses (races_id, horses_id) VALUES (?, ?);";
 
-    public static final String RACE_HORSES_BY_ID_SQL = "SELECT r.hippodrome, rh.horses_id FROM races r INNER JOIN races_has_horses rh WHERE r.id = ?";
-
     public static final String COUNT_ACTUAL_RACES_SQL = "SELECT count(id) FROM races WHERE time > CURRENT_TIMESTAMP;";
 
     private static final String COUNT_ALL_RACES_SQL = "SELECT count(id) FROM races;";
@@ -106,16 +104,9 @@ public class RaceDao extends RaceDaoAbstract {
     @Override
     public Optional<Race> read(Long id) throws DaoException {
         try(var connection = ConnectionManager.get();
-            var statement = connection.prepareStatement(SELECT_RACE_SQL);
-            var statementHorse = connection.prepareStatement(RACE_HORSES_BY_ID_SQL)){
+            var statement = connection.prepareStatement(SELECT_RACE_SQL)){
             statement.setLong(1, id);
-            statementHorse.setLong(1, id);
-            Set<Long> horses = new HashSet<>();
             var resultSet = statement.executeQuery();
-            var resultSetHorse = statementHorse.executeQuery();
-            while (resultSetHorse.next()) {
-                horses.add(resultSetHorse.getLong("horses_id"));
-            }
             Race race = new Race();
             while (resultSet.next()) {
                 race.setId(id);
@@ -123,7 +114,6 @@ public class RaceDao extends RaceDaoAbstract {
                 race.setDate(resultSet.getTimestamp("time").toLocalDateTime());
                 race.setBetCount(resultSet.getLong("COUNT(b.id)"));
                 race.setBetSum(resultSet.getBigDecimal("SUM(b.amount_bet)"));
-                race.setHorse(horses);
             }
             return Optional.of(race);
         } catch (SQLException e) {
@@ -136,14 +126,12 @@ public class RaceDao extends RaceDaoAbstract {
     public boolean addRaceResult(ProxyConnection connection, Map<Integer, Long> resultMap, Long raceId) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(ADD_RACE_RESULT_SQL);
         statement.setLong(2, raceId);
+        int rowsEffected = 0;
         for (int i = 1; i <= resultMap.size(); i++) {
-            if (resultMap.get(i) == 0L) {
-                statement.setNull(i + 1, Types.NULL);
-            }
             statement.setLong(1, resultMap.get(i));
             statement.setLong(3 , i);
+             rowsEffected = statement.executeUpdate();
         }
-        int rowsEffected = statement.executeUpdate();
         return rowsEffected > 0;
     }
 

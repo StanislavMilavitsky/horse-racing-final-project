@@ -2,12 +2,12 @@ package by.milavitsky.horseracing.dao.daoabstract;
 
 import by.milavitsky.horseracing.dao.pool.ProxyConnection;
 import by.milavitsky.horseracing.entity.Bet;
+import by.milavitsky.horseracing.entity.enums.TotalResultEnum;
 import by.milavitsky.horseracing.exception.DaoException;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public abstract class BetDaoAbstract implements Dao<Bet, Long> {
 
@@ -15,7 +15,7 @@ public abstract class BetDaoAbstract implements Dao<Bet, Long> {
 
     public abstract boolean deleteByRace(ProxyConnection connection, Long raceId) throws SQLException;
 
-    public abstract  Bet create(ProxyConnection connection, Bet bet) throws DaoException;
+    public abstract Optional<Bet> create(ProxyConnection connection, Bet bet) throws DaoException;
 
     public abstract List<Bet> findByUser(Long userId) throws DaoException;
 
@@ -38,4 +38,6 @@ public abstract class BetDaoAbstract implements Dao<Bet, Long> {
     public final Optional<Bet> create(Bet bet) throws DaoException {
         throw new UnsupportedOperationException();
     }
+
+    public abstract boolean updateTotalResult(ProxyConnection connection, TotalResultEnum result, Long betId) throws SQLException;
 }

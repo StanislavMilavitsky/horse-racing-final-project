@@ -1,6 +1,7 @@
 package by.milavitsky.horseracing.entity;
 
 import by.milavitsky.horseracing.entity.enums.BetType;
+import by.milavitsky.horseracing.entity.enums.TotalResultEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -16,29 +17,38 @@ public class Bet implements Serializable {
     private BigDecimal ratio;
     private Long racesId;
     private String transferStatus;
-    private LocalDateTime time;
+    private LocalDateTime date;
     private Long userId;
     private Long horseId;
     private BetType betType;
     private Horse horse;
     private Race race;
+    private TotalResultEnum resultStatus;
 
     public Bet() {
     }
 
     public Bet(Long id, BigDecimal amountBet, BigDecimal ratio, Long racesId, String transferStatus,
-               LocalDateTime time, Long userId, Long horseId, BetType betType, Horse horse, Race race) {
+               LocalDateTime date, Long userId, Long horseId, BetType betType, Horse horse, Race race) {
         this.id = id;
         this.amountBet = amountBet;
         this.ratio = ratio;
         this.racesId = racesId;
         this.transferStatus = transferStatus;
-        this.time = time;
+        this.date = date;
         this.userId = userId;
         this.horseId = horseId;
         this.betType = betType;
         this.horse = horse;
         this.race = race;
+    }
+
+    public TotalResultEnum getResultStatus() {
+        return resultStatus;
+    }
+
+    public void setResultStatus(TotalResultEnum resultStatus) {
+        this.resultStatus = resultStatus;
     }
 
     public Long getId() {
@@ -81,12 +91,12 @@ public class Bet implements Serializable {
         this.transferStatus = transferStatus;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public LocalDateTime getDate() {
+        return date;
     }
 
-    public void setTime(LocalDateTime time) {
-        this.time = time;
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     public Long getUserId() {
@@ -139,7 +149,7 @@ public class Bet implements Serializable {
                 Objects.equals(ratio, bet.ratio) &&
                 Objects.equals(racesId, bet.racesId) &&
                 transferStatus == bet.transferStatus &&
-                Objects.equals(time, bet.time) &&
+                Objects.equals(date, bet.date) &&
                 Objects.equals(userId, bet.userId) &&
                 Objects.equals(horseId, bet.horseId)&&
                 betType == bet.betType;
@@ -147,7 +157,7 @@ public class Bet implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, amountBet, ratio, racesId, transferStatus, time, userId, horseId) * 21 - 123;
+        return Objects.hash(id, amountBet, ratio, racesId, transferStatus, date, userId, horseId) * 21 - 123;
     }
 
     @Override
@@ -158,7 +168,7 @@ public class Bet implements Serializable {
         builder.append(", coefficient='").append(ratio);
         builder.append(", passport='").append(racesId);
         builder.append(", transferStatus='").append(transferStatus);
-        builder.append(", dateDeadline='").append(time);
+        builder.append(", dateDeadline='").append(date);
         builder.append(", userId=").append(userId);
         builder.append(", horseId='").append(horseId);
         builder.append(", bet type='").append(betType);

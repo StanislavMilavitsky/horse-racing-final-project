@@ -2,14 +2,15 @@ package by.milavitsky.horseracing.controller.command;
 
 import by.milavitsky.horseracing.controller.Command;
 import by.milavitsky.horseracing.controller.Router;
+import by.milavitsky.horseracing.entity.Horse;
 import by.milavitsky.horseracing.entity.Race;
 import by.milavitsky.horseracing.entity.enums.PermissionEnum;
 import by.milavitsky.horseracing.exception.CommandException;
 import by.milavitsky.horseracing.exception.ServiceException;
 import by.milavitsky.horseracing.service.ServiceFactory;
 import by.milavitsky.horseracing.service.serviceinterface.BetServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.HorseServiceInterface;
 import by.milavitsky.horseracing.service.serviceinterface.RaceServiceInterface;
-import by.milavitsky.horseracing.service.serviceinterface.ResultServiceInterface;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,14 +37,16 @@ public class EnterResultCommand implements Command {
             String id = request.getParameter(PARAM_RACE_ID);
             if (isNotEmpty(id) && horseMap.size() < MIN_HORSE_IN_RACE) {
                 RaceServiceInterface raceService = (RaceServiceInterface) ServiceFactory.getInstance().getClass(RaceServiceInterface.class);
+                HorseServiceInterface horseService = (HorseServiceInterface) ServiceFactory.getInstance().getClass(HorseServiceInterface.class);
                 Race race = raceService.findInfo(id);
+                Set<Horse> horses = horseService.showByRace(id);
                 request.setAttribute(ATTR_RACE_INFO, race);
-                request.setAttribute(ATTR_RACE_SET, race.getHorse());//todo
+                request.setAttribute(ATTR_RACE_SET, horses);
                 return new Router(PAGE_ENTER_RESULT);
             } else {
                 if (isNotEmpty(id)) {
-                    ResultServiceInterface resultService = (ResultServiceInterface) ServiceFactory.getInstance().getClass(ResultServiceInterface.class);
-                    resultService.enterResult(horseMap, id);
+                    BetServiceInterface betService = (BetServiceInterface) ServiceFactory.getInstance().getClass(BetServiceInterface.class);
+                    betService.enterResult(horseMap, id);
                 }
                 Router router = new Router(PAGE_REDIRECT_INDEX);
                 router.redirect();

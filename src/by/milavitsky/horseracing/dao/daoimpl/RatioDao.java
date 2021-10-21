@@ -30,7 +30,6 @@ public class RatioDao extends RatioDaoAbstract {
 
     @Override
     public boolean setRatios(Set<Ratio> ratioSet) throws DaoException {
-
         try(var proxyConnection = ConnectionManager.get();
             var statement = proxyConnection.prepareStatement(ADD_RATIO_SQL)) {
             for (Ratio ratio : ratioSet) {
