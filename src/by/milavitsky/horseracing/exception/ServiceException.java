@@ -1,5 +1,7 @@
 package by.milavitsky.horseracing.exception;
-
+/**
+ * The type Service exception which occurs when working with service layer.
+ */
 public class ServiceException extends Exception {
     /**
      * Instantiates a new Service by.milavitsky.horse_racing.exception.

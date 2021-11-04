@@ -2,7 +2,9 @@ package by.milavitsky.horseracing.cache;
 
 import java.util.EnumMap;
 import java.util.Map;
-
+/**
+ * The type Cache factory.
+ */
 public class CacheFactory {
     private static final CacheFactory instance = new CacheFactory();
     private static final Map<CacheType, ? super Cache> cacheMap = new EnumMap<>(CacheType.class);
@@ -26,10 +28,17 @@ public class CacheFactory {
         return cacheMap.get(type);
     }
 
+    /**
+     * Creat singleton
+     */
     private static class CacheFactoryHolder{
         private static final CacheFactory HOLDER_INSTANCE = new CacheFactory();
     }
-
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static CacheFactory getInstance() {
         return CacheFactoryHolder.HOLDER_INSTANCE;
     }

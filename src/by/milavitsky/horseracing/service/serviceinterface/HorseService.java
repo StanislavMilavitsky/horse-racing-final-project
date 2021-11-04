@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * The interface Horse service.
  */
-public interface HorseServiceInterface extends Service {
+public interface HorseService extends Service {
     /**
      * Show horse set by race id.
      *

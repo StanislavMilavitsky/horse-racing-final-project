@@ -5,6 +5,9 @@ import by.milavitsky.horseracing.dao.daoimpl.*;
 
 import java.util.Map;
 
+/**
+ * The type Dao factory.
+ */
 public class DaoFactory {
 
     private static final Map<Class<? extends Dao<?, ?>>, Dao<?, ?>> factory;
@@ -33,11 +36,18 @@ public class DaoFactory {
         return factory.get(clazz);
     }
 
+    /**
+     * Make inner class that does singleton
+     */
     private static class DaoFactoryHolder{
         private static final DaoFactory HOLDER_INSTANCE = new DaoFactory();
 
     }
-
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static DaoFactory getInstance() {
         return DaoFactoryHolder.HOLDER_INSTANCE;
     }

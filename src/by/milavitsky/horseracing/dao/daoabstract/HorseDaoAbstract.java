@@ -1,5 +1,6 @@
 package by.milavitsky.horseracing.dao.daoabstract;
 
+import by.milavitsky.horseracing.dao.Dao;
 import by.milavitsky.horseracing.entity.Horse;
 import by.milavitsky.horseracing.exception.DaoException;
 
@@ -8,9 +9,19 @@ import java.util.Optional;
 import java.util.Set;
 
 public abstract class HorseDaoAbstract implements Dao<Horse, Long> {
-
+    /**
+     * Find all active horses in database
+     * @return list of horses
+     * @throws DaoException
+     */
     public abstract List<Horse> findAll() throws DaoException;
 
+    /**
+     * Find horses by race
+     * @param raceId
+     * @return set of horses
+     * @throws DaoException
+     */
     public abstract Set<Horse> findByRace(Long raceId) throws DaoException;
 
     @Override

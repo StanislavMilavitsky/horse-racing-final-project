@@ -5,7 +5,7 @@ import by.milavitsky.horseracing.dao.daoabstract.HorseDaoAbstract;
 import by.milavitsky.horseracing.entity.Horse;
 import by.milavitsky.horseracing.exception.DaoException;
 import by.milavitsky.horseracing.exception.ServiceException;
-import by.milavitsky.horseracing.service.serviceinterface.HorseServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.HorseService;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
@@ -28,14 +28,14 @@ import static org.testng.Assert.fail;
 @SuppressStaticInitializationFor({"by.milavitsky.horseracing.dao.DaoFactory", "by.milavitsky.horseracing.dao.Dao"})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*", "javax.management.*"})
 @PrepareForTest({DaoFactory.class})
-public class HorseServiceTest extends PowerMockTestCase {
+public class HorseServiceImplTest extends PowerMockTestCase {
 
     @Mock
     private DaoFactory daoFactory;
     @Mock
     private HorseDaoAbstract horseDao;
 
-    private HorseServiceInterface service;
+    private HorseService service;
 
 
     @BeforeMethod
@@ -43,7 +43,7 @@ public class HorseServiceTest extends PowerMockTestCase {
         mockStatic(DaoFactory.class);
         when(DaoFactory.getInstance()).thenReturn(daoFactory);
         when((HorseDaoAbstract) daoFactory.getClass(Mockito.any())).thenReturn(horseDao);
-        service = HorseService.getInstance();
+        service = HorseServiceImpl.getInstance();
     }
 
     @DataProvider(name = "horseSet")

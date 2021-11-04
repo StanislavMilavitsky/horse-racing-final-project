@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * The interface Ratio service.
  */
-public interface RatioServiceInterface extends Service {
+public interface RatioService extends Service {
     /**
      * Find ratio list by race id.
      *

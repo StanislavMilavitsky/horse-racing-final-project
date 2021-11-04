@@ -3,7 +3,7 @@ package by.milavitsky.horseracing.cache;
 /**
  * The type Cache variables.
  */
-public class CacheVariables {
+public class CacheVariable {
     /**
      * The key in cache map.
      */
@@ -11,6 +11,6 @@ public class CacheVariables {
     public static final String COUNT_ALL = "countAll";
     public static final String USER_ROLES = "roles";
 
-    private CacheVariables() {
+    private CacheVariable() {
     }
 }

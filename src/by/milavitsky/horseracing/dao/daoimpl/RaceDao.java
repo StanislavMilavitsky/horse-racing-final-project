@@ -135,6 +135,10 @@ public class RaceDao extends RaceDaoAbstract {
         return rowsEffected > 0;
     }
 
+    public static RaceDao getInstance() {
+        return RaceDaoHolder.HOLDER_INSTANCE;
+    }
+
     private List<Race> findAll(String sql, int limit, int offset) throws DaoException {
         List<Race> races = new ArrayList<>();
         try (var connection = ConnectionManager.get();
@@ -143,14 +147,6 @@ public class RaceDao extends RaceDaoAbstract {
             statement.setInt(2, offset);
             var resultSet = statement.executeQuery();
             while (resultSet.next()) {
-               /*
-               var statementHorse = connection.prepareStatement(SELECT_HORSE))
-               statementHorse.setLong(1, resultSet.getLong("id"));
-                var resultSetHorse = statementHorse.executeQuery();
-                Set<Long> horse = new HashSet<>();
-                while (resultSetHorse.next()) {
-                    horse.add(resultSetHorse.getLong("horses_id"));
-                }*/
                 Long id = resultSet.getLong("id");
                 String hippodrome = resultSet.getString("hippodrome");
                 LocalDateTime date = resultSet.getTimestamp("time").toLocalDateTime();
@@ -179,12 +175,8 @@ public class RaceDao extends RaceDaoAbstract {
             throw new DaoException("Count races exception!", e);
         }
     }
-
     private static class RaceDaoHolder{
         private static final RaceDao HOLDER_INSTANCE = new RaceDao();
-    }
 
-    public static RaceDao getInstance() {
-        return RaceDaoHolder.HOLDER_INSTANCE;
     }
 }

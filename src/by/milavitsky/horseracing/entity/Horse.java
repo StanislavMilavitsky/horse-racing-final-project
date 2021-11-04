@@ -1,7 +1,7 @@
 package by.milavitsky.horseracing.entity;
 
 
-import by.milavitsky.horseracing.entity.enums.SexEnum;
+import by.milavitsky.horseracing.entity.enumentity.SexEnum;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -22,6 +22,13 @@ public class Horse implements Serializable {
     private String jockey;
 
     public Horse() {
+    }
+
+    public Horse(Long id, String name, Integer age, String jockey) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.jockey = jockey;
     }
 
     public Horse(Long id, String name, SexEnum sex, Double weight, String breed, Integer age, String status,

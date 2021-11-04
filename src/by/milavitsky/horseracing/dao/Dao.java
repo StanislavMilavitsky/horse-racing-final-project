@@ -1,4 +1,4 @@
-package by.milavitsky.horseracing.dao.daoabstract;
+package by.milavitsky.horseracing.dao;
 
 import by.milavitsky.horseracing.exception.DaoException;
 import org.apache.logging.log4j.LogManager;

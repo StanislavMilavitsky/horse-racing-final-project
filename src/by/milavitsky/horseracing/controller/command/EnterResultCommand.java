@@ -4,13 +4,13 @@ import by.milavitsky.horseracing.controller.Command;
 import by.milavitsky.horseracing.controller.Router;
 import by.milavitsky.horseracing.entity.Horse;
 import by.milavitsky.horseracing.entity.Race;
-import by.milavitsky.horseracing.entity.enums.PermissionEnum;
+import by.milavitsky.horseracing.entity.enumentity.PermissionEnum;
 import by.milavitsky.horseracing.exception.CommandException;
 import by.milavitsky.horseracing.exception.ServiceException;
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.serviceinterface.BetServiceInterface;
-import by.milavitsky.horseracing.service.serviceinterface.HorseServiceInterface;
-import by.milavitsky.horseracing.service.serviceinterface.RaceServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.BetService;
+import by.milavitsky.horseracing.service.serviceinterface.HorseService;
+import by.milavitsky.horseracing.service.serviceinterface.RaceService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.Set;
 
 import static by.milavitsky.horseracing.controller.CommandParameter.*;
-import static by.milavitsky.horseracing.entity.enums.PermissionEnum.CUSTOMER_BASIC;
-import static by.milavitsky.horseracing.entity.enums.PermissionEnum.PLACE_RESULT;
+import static by.milavitsky.horseracing.entity.enumentity.PermissionEnum.CUSTOMER_BASIC;
+import static by.milavitsky.horseracing.entity.enumentity.PermissionEnum.PLACE_RESULT;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class EnterResultCommand implements Command {
@@ -36,8 +36,8 @@ public class EnterResultCommand implements Command {
             }
             String id = request.getParameter(PARAM_RACE_ID);
             if (isNotEmpty(id) && horseMap.size() < MIN_HORSE_IN_RACE) {
-                RaceServiceInterface raceService = (RaceServiceInterface) ServiceFactory.getInstance().getClass(RaceServiceInterface.class);
-                HorseServiceInterface horseService = (HorseServiceInterface) ServiceFactory.getInstance().getClass(HorseServiceInterface.class);
+                RaceService raceService = (RaceService) ServiceFactory.getInstance().getClass(RaceService.class);
+                HorseService horseService = (HorseService) ServiceFactory.getInstance().getClass(HorseService.class);
                 Race race = raceService.findInfo(id);
                 Set<Horse> horses = horseService.showByRace(id);
                 request.setAttribute(ATTR_RACE_INFO, race);
@@ -45,7 +45,7 @@ public class EnterResultCommand implements Command {
                 return new Router(PAGE_ENTER_RESULT);
             } else {
                 if (isNotEmpty(id)) {
-                    BetServiceInterface betService = (BetServiceInterface) ServiceFactory.getInstance().getClass(BetServiceInterface.class);
+                    BetService betService = (BetService) ServiceFactory.getInstance().getClass(BetService.class);
                     betService.enterResult(horseMap, id);
                 }
                 Router router = new Router(PAGE_REDIRECT_INDEX);

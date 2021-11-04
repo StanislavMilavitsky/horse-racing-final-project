@@ -1,10 +1,11 @@
-package by.milavitsky.horseracing.dao.pool;
+package by.milavitsky.horseracing.dao;
 
-import by.milavitsky.horseracing.dao.DaoFactory;
 import by.milavitsky.horseracing.dao.daoabstract.*;
 
+import by.milavitsky.horseracing.dao.pool.ConnectionManager;
+import by.milavitsky.horseracing.dao.pool.ProxyConnection;
 import by.milavitsky.horseracing.entity.Bet;
-import by.milavitsky.horseracing.entity.enums.TotalResultEnum;
+import by.milavitsky.horseracing.entity.enumentity.TotalResultEnum;
 import by.milavitsky.horseracing.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,6 +28,12 @@ public class TransactionManager {
     private TransactionManager() {
     }
 
+    /**
+     * Enter result in database insert in other tables
+     * @param resultMap
+     * @param raceId
+     * @throws DaoException
+     */
     public void enterResult(Map<Integer, Long> resultMap, Long raceId) throws DaoException {
         ProxyConnection connection = null;
         try  {
@@ -81,6 +88,12 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * Add bet in database insert in other tables
+     * @param bet
+     * @return bet if it is insert
+     * @throws DaoException
+     */
     public Optional<Bet> addBet(Bet bet) throws DaoException {
         ProxyConnection connection = null;
         try {
@@ -108,6 +121,12 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * Delete race from databases affecting different tables
+     * @param id
+     * @return boolean of result
+     * @throws DaoException
+     */
     public boolean deleteRace(Long id) throws DaoException {
         ProxyConnection connection = null;
         try {
@@ -152,6 +171,10 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * Rollback if commit failed
+     * @param connection from Proxy
+     */
     private void rollback(ProxyConnection connection) {
         if (connection != null) {
             try {

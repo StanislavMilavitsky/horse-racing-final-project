@@ -3,11 +3,11 @@ package by.milavitsky.horseracing.controller.command;
 import by.milavitsky.horseracing.controller.Command;
 import by.milavitsky.horseracing.controller.Router;
 import by.milavitsky.horseracing.entity.User;
-import by.milavitsky.horseracing.entity.enums.PermissionEnum;
+import by.milavitsky.horseracing.entity.enumentity.PermissionEnum;
 import by.milavitsky.horseracing.exception.CommandException;
 import by.milavitsky.horseracing.exception.ServiceException;
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.serviceinterface.BetServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.BetService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 import static by.milavitsky.horseracing.controller.CommandParameter.*;
-import static by.milavitsky.horseracing.entity.enums.PermissionEnum.*;
+import static by.milavitsky.horseracing.entity.enumentity.PermissionEnum.*;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 
@@ -30,7 +30,7 @@ public class BetCommand implements Command {
                 if (isNotEmpty(info) && isNotEmpty(cash)) {
                     HttpSession session = request.getSession();
                     User user = (User) session.getAttribute(ATTR_USER_AUTH);
-                    BetServiceInterface betService = (BetServiceInterface) ServiceFactory.getInstance().getClass(BetServiceInterface.class);
+                    BetService betService = (BetService) ServiceFactory.getInstance().getClass(BetService.class);
                     boolean result = betService.addBet(info, cash, user.getCash(), user.getId());
                     if (result) {
                         BigDecimal userCash = user.getCash();

@@ -46,7 +46,7 @@ public class UserDao extends UserDaoAbstract {
     @Override
     public User authorization(User user) throws DaoException {
         try (var connection = ConnectionManager.get();
-             var statement = connection.prepareStatement(USER_AUTHORIZED_SQL)) {//todo
+             var statement = connection.prepareStatement(USER_AUTHORIZED_SQL)) {
             statement.setString(1, user.getEmail());
             var resultSet = statement.executeQuery();
             User userDao = null;

@@ -9,8 +9,8 @@ import by.milavitsky.horseracing.exception.DaoException;
 import by.milavitsky.horseracing.exception.ServiceException;
 
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.serviceinterface.HorseServiceInterface;
-import by.milavitsky.horseracing.service.serviceinterface.RatioServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.HorseService;
+import by.milavitsky.horseracing.service.serviceinterface.RatioService;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
@@ -33,8 +33,8 @@ import static org.testng.Assert.fail;
 
 @SuppressStaticInitializationFor({"by.milavitsky.horseracing.dao.DaoFactory", "by.milavitsky.horseracing.dao.Dao", "by.milavitsky.horseracing.service.ServiceFactory"})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*", "javax.management.*"})
-@PrepareForTest({DaoFactory.class, HorseServiceInterface.class, ServiceFactory.class})
-public class RatioServiceTest extends PowerMockTestCase {
+@PrepareForTest({DaoFactory.class, HorseService.class, ServiceFactory.class})
+public class RatioServiceImplTest extends PowerMockTestCase {
 
     @Mock
     private ServiceFactory serviceFactory;
@@ -43,19 +43,19 @@ public class RatioServiceTest extends PowerMockTestCase {
     @Mock
     private RatioDaoAbstract ratioDao;
     @Mock
-    private HorseServiceInterface horseService;
+    private HorseService horseService;
 
-    private RatioServiceInterface service;
+    private RatioService service;
 
     @BeforeMethod
     public void setUp() {
         mockStatic(DaoFactory.class);
         when(DaoFactory.getInstance()).thenReturn(daoFactory);
         when((RatioDaoAbstract) daoFactory.getClass(Mockito.any())).thenReturn(ratioDao);
-        service = RatioService.getInstance();
+        service = RatioServiceImpl.getInstance();
         mockStatic(ServiceFactory.class);
         when(ServiceFactory.getInstance()).thenReturn(serviceFactory);
-        when((HorseServiceInterface) serviceFactory.getClass(Mockito.any())).thenReturn(horseService);
+        when((HorseService) serviceFactory.getClass(Mockito.any())).thenReturn(horseService);
     }
 
     @DataProvider(name = "validMap")

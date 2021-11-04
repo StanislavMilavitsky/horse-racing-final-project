@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * The interface User service.
  */
-public interface UserServiceInterface extends Service {
+public interface UserService extends Service {
     /**
      * Authorize user.
      *

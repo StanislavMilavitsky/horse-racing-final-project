@@ -8,8 +8,8 @@ import by.milavitsky.horseracing.entity.Ratio;
 import by.milavitsky.horseracing.exception.DaoException;
 import by.milavitsky.horseracing.exception.ServiceException;
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.serviceinterface.HorseServiceInterface;
-import by.milavitsky.horseracing.service.serviceinterface.RatioServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.HorseService;
+import by.milavitsky.horseracing.service.serviceinterface.RatioService;
 import by.milavitsky.horseracing.validation.CommonValidator;
 import by.milavitsky.horseracing.validation.RatioValidator;
 import org.apache.logging.log4j.LogManager;
@@ -18,9 +18,9 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.util.*;
 
-public class RatioService implements RatioServiceInterface {
+public class RatioServiceImpl implements RatioService {
 
-    private static final Logger logger = LogManager.getLogger(RatioService.class);
+    private static final Logger logger = LogManager.getLogger(RatioServiceImpl.class);
 
     private static final String MAP_KEY_DELIMITER = "\\|";
     private static final int TYPE_COUNT = 2;
@@ -63,7 +63,7 @@ public class RatioService implements RatioServiceInterface {
             if (ratioSet.isEmpty() || raceId == 0L) {
                 return false;
             }
-            HorseServiceInterface horseService = (HorseServiceInterface) ServiceFactory.getInstance().getClass(HorseServiceInterface.class);
+            HorseService horseService = (HorseService) ServiceFactory.getInstance().getClass(HorseService.class);
             Set<Horse> horses = horseService.showByRace(raceId.toString());
             if (ratioSet.size() != horses.size() * TYPE_COUNT) {
                 return false;
@@ -79,10 +79,10 @@ public class RatioService implements RatioServiceInterface {
     }
 
     private static class RatioServiceHolder{
-        private static final RatioService HOLDER_INSTANCE = new RatioService();
+        private static final RatioServiceImpl HOLDER_INSTANCE = new RatioServiceImpl();
     }
 
-    public static RatioService getInstance() {
+    public static RatioServiceImpl getInstance() {
         return RatioServiceHolder.HOLDER_INSTANCE;
     }
 }

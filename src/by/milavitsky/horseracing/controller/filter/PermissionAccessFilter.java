@@ -4,7 +4,7 @@ import by.milavitsky.horseracing.controller.Command;
 import by.milavitsky.horseracing.controller.CommandMap;
 import by.milavitsky.horseracing.controller.CommandType;
 import by.milavitsky.horseracing.entity.User;
-import by.milavitsky.horseracing.entity.enums.PermissionEnum;
+import by.milavitsky.horseracing.entity.enumentity.PermissionEnum;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

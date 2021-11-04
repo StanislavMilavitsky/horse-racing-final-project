@@ -16,7 +16,7 @@ import java.util.concurrent.BlockingQueue;
 public final class ConnectionManager {
     public static final Logger logger = LogManager.getLogger(ConnectionManager.class);
     /**
-     * Create settings by properties in resourses
+     * Static fields by properties in resources
      */
     private static final String PASSWORD_KEY = "db.password";
     private static final String USERNAME_KEY = "db.userName";
@@ -26,6 +26,7 @@ public final class ConnectionManager {
     private static BlockingQueue<ProxyConnection> pool;
     public static final Integer DEFAULT_POOL_SIZE = 10;
     private static List<Connection> sourceConnections;
+
 
     static {
         loadDriver();
@@ -46,6 +47,10 @@ public final class ConnectionManager {
         }
     }
 
+    /**
+     * Initialization connection pool, make blocking queue and add proxy connection in pool
+     */
+
     private static void initConnectionPool() {
         var poolSize = PropertiesUtil.get(POOL_SIZE_KEY);
         var size = poolSize == null ? DEFAULT_POOL_SIZE : Integer.parseInt(poolSize);
@@ -59,7 +64,10 @@ public final class ConnectionManager {
         }
     }
 
-
+    /**
+     * @return proxy thread
+     * @throws DaoException
+     */
     public static ProxyConnection get() throws DaoException {
         try {
             return pool.take();
@@ -68,7 +76,10 @@ public final class ConnectionManager {
         }
     }
 
-
+    /**
+     *
+     * @return connection with mysql by properties
+     */
     private static Connection open() {
         try {
             return DriverManager.getConnection(

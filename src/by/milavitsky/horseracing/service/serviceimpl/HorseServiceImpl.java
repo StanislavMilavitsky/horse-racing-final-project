@@ -5,7 +5,7 @@ import by.milavitsky.horseracing.dao.daoabstract.HorseDaoAbstract;
 import by.milavitsky.horseracing.entity.Horse;
 import by.milavitsky.horseracing.exception.DaoException;
 import by.milavitsky.horseracing.exception.ServiceException;
-import by.milavitsky.horseracing.service.serviceinterface.HorseServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.HorseService;
 import by.milavitsky.horseracing.validation.CommonValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class HorseServiceImpl implements HorseServiceInterface {
+public class HorseServiceImpl implements HorseService {
     private static final Logger logger = LogManager.getLogger(HorseServiceImpl.class);
 
     private HorseServiceImpl(){

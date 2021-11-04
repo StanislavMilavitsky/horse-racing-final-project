@@ -2,19 +2,20 @@ package by.milavitsky.horseracing.controller.command;
 
 import by.milavitsky.horseracing.controller.Command;
 import by.milavitsky.horseracing.controller.Router;
-import by.milavitsky.horseracing.entity.enums.PermissionEnum;
+import by.milavitsky.horseracing.entity.enumentity.PermissionEnum;
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.serviceinterface.UserServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.UserService;
 import by.milavitsky.horseracing.exception.CommandException;
 import by.milavitsky.horseracing.exception.ServiceException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.Collections;
 import java.util.Set;
 
-import static by.milavitsky.horseracing.entity.enums.PermissionEnum.ADMIN_BASIC;
-import static by.milavitsky.horseracing.entity.enums.PermissionEnum.BAN_USER;
+import static by.milavitsky.horseracing.entity.enumentity.PermissionEnum.ADMIN_BASIC;
+import static by.milavitsky.horseracing.entity.enumentity.PermissionEnum.BAN_USER;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static by.milavitsky.horseracing.controller.CommandParameter.PARAM_USER_ID;
 
@@ -24,7 +25,7 @@ public class BanUserCommand implements Command {
         try {
             String userId = request.getParameter(PARAM_USER_ID);
             if (isNotEmpty(userId)) {
-                UserServiceInterface userService = (UserServiceInterface) ServiceFactory.getInstance().getClass(UserServiceInterface.class);
+                UserService userService = (UserService) ServiceFactory.getInstance().getClass(UserService.class);
                 userService.ban(userId);
             }
             Router router = new Router(request);

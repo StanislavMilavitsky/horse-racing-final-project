@@ -3,9 +3,9 @@ package by.milavitsky.horseracing.controller.command;
 import by.milavitsky.horseracing.controller.Command;
 import by.milavitsky.horseracing.controller.Router;
 import by.milavitsky.horseracing.entity.User;
-import by.milavitsky.horseracing.entity.enums.PermissionEnum;
+import by.milavitsky.horseracing.entity.enumentity.PermissionEnum;
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.serviceinterface.UserServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.UserService;
 import by.milavitsky.horseracing.exception.CommandException;
 import by.milavitsky.horseracing.exception.ServiceException;
 
@@ -31,7 +31,7 @@ public class LogInCommand implements Command {
             User user = new User();
             user.setEmail(email);
             user.setPassword(password);
-            UserServiceInterface userService = (UserServiceInterface) ServiceFactory.getInstance().getClass(UserServiceInterface.class);
+            UserService userService = (UserService) ServiceFactory.getInstance().getClass(UserService.class);
             User userAuthorized = userService.authorization(user);
             if (userAuthorized != null) {
                 HttpSession session = request.getSession();

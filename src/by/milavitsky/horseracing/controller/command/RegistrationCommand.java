@@ -3,9 +3,9 @@ package by.milavitsky.horseracing.controller.command;
 import by.milavitsky.horseracing.controller.Command;
 import by.milavitsky.horseracing.controller.Router;
 import by.milavitsky.horseracing.entity.User;
-import by.milavitsky.horseracing.entity.enums.PermissionEnum;
+import by.milavitsky.horseracing.entity.enumentity.PermissionEnum;
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.serviceinterface.UserServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.UserService;
 import by.milavitsky.horseracing.exception.CommandException;
 import by.milavitsky.horseracing.exception.ServiceException;
 
@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static by.milavitsky.horseracing.controller.CommandParameter.*;
-import static by.milavitsky.horseracing.entity.enums.PermissionEnum.*;
+import static by.milavitsky.horseracing.entity.enumentity.PermissionEnum.*;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class RegistrationCommand implements Command {
@@ -28,7 +28,7 @@ public class RegistrationCommand implements Command {
             String password = request.getParameter(PARAM_PASSWORD);
             String email = request.getParameter(PARAM_EMAIL);
             if (isNotEmpty(name) && isNotEmpty(surname) && isNotEmpty(password) && isNotEmpty(email)) {
-                UserServiceInterface userService = (UserServiceInterface) ServiceFactory.getInstance().getClass(UserServiceInterface.class);
+                UserService userService = (UserService) ServiceFactory.getInstance().getClass(UserService.class);
                 Map<String, String> userMap = userService.registration(new User(name, surname, password, email));
                 if (userMap == null) {
                     Router router = new Router(PAGE_REDIRECT_INDEX);

@@ -1,12 +1,12 @@
 <c:set var="user" value="${sessionScope.userAuth}"/>
-<header id="page-topbar">
+<header id="page-topbar" style="background-color:#000080">
     <div class="navbar-header">
         <div class="d-flex">
             <!-- LOGO -->
             <div class="navbar-brand-box">
                 <a href="${pageContext.request.contextPath}/index.jsp" class="logo logo-light">
                     <span class="logo-lg">
-                        <img src="${pageContext.request.contextPath}/assets/images/logo.png" height="80">
+                        <img src="${pageContext.request.contextPath}/assets/images/logo.png" height="60">
                     </span>
                 </a>
             </div>

@@ -2,14 +2,14 @@ package by.milavitsky.horseracing.controller.command;
 
 import by.milavitsky.horseracing.controller.Command;
 import by.milavitsky.horseracing.controller.Router;
-import by.milavitsky.horseracing.entity.enums.PermissionEnum;
+import by.milavitsky.horseracing.entity.enumentity.PermissionEnum;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
 import static by.milavitsky.horseracing.controller.CommandParameter.PAGE_PROFILE;
-import static by.milavitsky.horseracing.entity.enums.PermissionEnum.*;
+import static by.milavitsky.horseracing.entity.enumentity.PermissionEnum.*;
 
 public class ProfileCommand implements Command {
     @Override

@@ -1,7 +1,7 @@
 package by.milavitsky.horseracing.entity;
 
-import by.milavitsky.horseracing.entity.enums.BetType;
-import by.milavitsky.horseracing.entity.enums.TotalResultEnum;
+import by.milavitsky.horseracing.entity.enumentity.BetType;
+import by.milavitsky.horseracing.entity.enumentity.TotalResultEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

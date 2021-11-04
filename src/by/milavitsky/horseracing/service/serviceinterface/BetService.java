@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-public interface BetServiceInterface extends Service {
+public interface BetService extends Service {
     /**
      * Show user bets.
      *

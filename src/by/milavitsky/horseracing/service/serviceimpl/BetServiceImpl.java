@@ -9,7 +9,7 @@ import by.milavitsky.horseracing.entity.Horse;
 import by.milavitsky.horseracing.entity.enumentity.BetType;
 import by.milavitsky.horseracing.exception.DaoException;
 import by.milavitsky.horseracing.exception.ServiceException;
-import by.milavitsky.horseracing.service.serviceinterface.BetServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.BetService;
 import by.milavitsky.horseracing.validation.BetValidator;
 import by.milavitsky.horseracing.validation.CommonValidator;
 import org.apache.logging.log4j.LogManager;
@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 import static by.milavitsky.horseracing.controller.CommandParameter.BLANK;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public class BetService implements BetServiceInterface {
-    private static final Logger logger = LogManager.getLogger(BetService.class);
+public class BetServiceImpl implements BetService {
+    private static final Logger logger = LogManager.getLogger(BetServiceImpl.class);
 
     private static final String INFO_TITLE = "Ratio\\{";
     private static final int INFO_ARRAY = 4;
@@ -124,10 +124,10 @@ public class BetService implements BetServiceInterface {
     }
 
     private static class BetServiceHolder{
-        private static final BetService HOLDER_INSTANCE = new BetService();
+        private static final BetServiceImpl HOLDER_INSTANCE = new BetServiceImpl();
     }
 
-    public static BetService getInstance() {
+    public static BetServiceImpl getInstance() {
         return BetServiceHolder.HOLDER_INSTANCE;
     }
 }

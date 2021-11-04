@@ -3,7 +3,7 @@ package by.milavitsky.horseracing.dao.daoimpl;
 import by.milavitsky.horseracing.dao.daoabstract.HorseDaoAbstract;
 import by.milavitsky.horseracing.dao.pool.ConnectionManager;
 import by.milavitsky.horseracing.entity.Horse;
-import by.milavitsky.horseracing.entity.enums.SexEnum;
+import by.milavitsky.horseracing.entity.enumentity.SexEnum;
 import by.milavitsky.horseracing.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

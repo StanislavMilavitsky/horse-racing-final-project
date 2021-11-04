@@ -6,6 +6,9 @@ import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
+/**
+ * Override method close it add pool in blocking queue
+ */
 public final class  ProxyConnection implements Connection {
     private final Connection connection;
     private final BlockingQueue<ProxyConnection> pool;

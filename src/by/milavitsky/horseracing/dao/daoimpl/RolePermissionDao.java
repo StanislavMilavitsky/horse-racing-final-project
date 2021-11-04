@@ -3,7 +3,7 @@ package by.milavitsky.horseracing.dao.daoimpl;
 import by.milavitsky.horseracing.dao.daoabstract.RolePermissionsDaoAbstract;
 import by.milavitsky.horseracing.dao.pool.ConnectionManager;
 import by.milavitsky.horseracing.entity.Role;
-import by.milavitsky.horseracing.entity.enums.PermissionEnum;
+import by.milavitsky.horseracing.entity.enumentity.PermissionEnum;
 import by.milavitsky.horseracing.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

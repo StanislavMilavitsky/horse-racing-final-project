@@ -7,7 +7,7 @@ import by.milavitsky.horseracing.dao.daoabstract.UserDaoAbstract;
 import by.milavitsky.horseracing.entity.User;
 import by.milavitsky.horseracing.exception.DaoException;
 import by.milavitsky.horseracing.exception.ServiceException;
-import by.milavitsky.horseracing.service.serviceinterface.UserServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.UserService;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
@@ -31,7 +31,7 @@ import static org.testng.AssertJUnit.*;
 @SuppressStaticInitializationFor({"by.milavitsky.horseracing.dao.DaoFactory", "by.milavitsky.horseracing.dao.Dao", "by.milavitsky.horseracing.cache.CacheFactory"})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*", "javax.management.*"})
 @PrepareForTest({DaoFactory.class, CacheFactory.class, UserDaoAbstract.class, Cache.class})
-public class UserServiceTest extends PowerMockTestCase {
+public class UserServiceImplTest extends PowerMockTestCase {
 
     @Mock
     private DaoFactory daoFactory;
@@ -42,7 +42,7 @@ public class UserServiceTest extends PowerMockTestCase {
     @Mock
     private Cache cache;
 
-    private UserServiceInterface service;
+    private UserService service;
     private User auth;
     private User hashUser;
 
@@ -51,7 +51,7 @@ public class UserServiceTest extends PowerMockTestCase {
         mockStatic(DaoFactory.class);
         when(DaoFactory.getInstance()).thenReturn(daoFactory);
         when((UserDaoAbstract) daoFactory.getClass(Mockito.any())).thenReturn(userDao);
-        service = UserService.getInstance();
+        service = UserServiceImpl.getInstance();
         mockStatic(CacheFactory.class);
         when(CacheFactory.getInstance()).thenReturn(cacheFactory);
         when((Cache) cacheFactory.getCache(Mockito.any())).thenReturn(cache);

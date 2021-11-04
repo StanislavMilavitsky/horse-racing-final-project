@@ -3,12 +3,12 @@ package by.milavitsky.horseracing.controller.command;
 import by.milavitsky.horseracing.controller.Command;
 import by.milavitsky.horseracing.controller.Router;
 import by.milavitsky.horseracing.entity.Horse;
-import by.milavitsky.horseracing.entity.enums.PermissionEnum;
+import by.milavitsky.horseracing.entity.enumentity.PermissionEnum;
 import by.milavitsky.horseracing.exception.CommandException;
 import by.milavitsky.horseracing.exception.ServiceException;
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.serviceinterface.HorseServiceInterface;
-import by.milavitsky.horseracing.service.serviceinterface.RaceServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.HorseService;
+import by.milavitsky.horseracing.service.serviceinterface.RaceService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +27,7 @@ public class AddRaceCommand implements Command {
         try {
             String location = request.getParameter(PARAM_LOCATION);
             String date = request.getParameter(PARAM_DATE);
-            Set<Long> horseSet = new HashSet<>();//todo
+            Set<Long> horseSet = new HashSet<>();
             for (int i = 0; i <= 5; i++) {
                 String id = request.getParameter(PARAM_HORSE + i);
                 if (id != null && !id.trim().isEmpty()) {
@@ -35,7 +35,7 @@ public class AddRaceCommand implements Command {
                 }
             }
             if (isNoneEmpty(location) && isNotEmpty(date) && horseSet.size() >= MIN_HORSE_IN_RACE) {
-                RaceServiceInterface raceService = (RaceServiceInterface) ServiceFactory.getInstance().getClass(RaceServiceInterface.class);
+                RaceService raceService = (RaceService) ServiceFactory.getInstance().getClass(RaceService.class);
                 boolean result = raceService.addRace(horseSet, location, date);
                 if (result) {
                     Router router = new Router(PAGE_REDIRECT_INDEX);
@@ -43,7 +43,7 @@ public class AddRaceCommand implements Command {
                     return router;
                 }
             }
-            HorseServiceInterface horseService = (HorseServiceInterface) ServiceFactory.getInstance().getClass(HorseServiceInterface.class);
+            HorseService horseService = (HorseService) ServiceFactory.getInstance().getClass(HorseService.class);
             List<Horse> horses = horseService.findAll();
             request.setAttribute(ATTR_HORSE_LIST, horses);
             return new Router(PAGE_ADD_RACE);

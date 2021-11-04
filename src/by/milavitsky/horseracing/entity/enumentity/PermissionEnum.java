@@ -1,4 +1,4 @@
-package by.milavitsky.horseracing.entity.enums;
+package by.milavitsky.horseracing.entity.enumentity;
 
 public enum PermissionEnum {
     GUEST_BASIC,

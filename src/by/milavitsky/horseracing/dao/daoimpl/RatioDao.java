@@ -3,7 +3,7 @@ package by.milavitsky.horseracing.dao.daoimpl;
 import by.milavitsky.horseracing.dao.daoabstract.RatioDaoAbstract;
 import by.milavitsky.horseracing.dao.pool.ConnectionManager;
 import by.milavitsky.horseracing.dao.pool.ProxyConnection;
-import by.milavitsky.horseracing.entity.enums.Ratio;
+import by.milavitsky.horseracing.entity.Ratio;
 
 import by.milavitsky.horseracing.exception.DaoException;
 import org.apache.logging.log4j.LogManager;

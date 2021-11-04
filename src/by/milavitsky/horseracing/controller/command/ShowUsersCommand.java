@@ -3,10 +3,9 @@ package by.milavitsky.horseracing.controller.command;
 import by.milavitsky.horseracing.controller.Command;
 import by.milavitsky.horseracing.controller.Router;
 import by.milavitsky.horseracing.entity.User;
-import by.milavitsky.horseracing.entity.enums.PermissionEnum;
+import by.milavitsky.horseracing.entity.enumentity.PermissionEnum;
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.serviceimpl.UserService;
-import by.milavitsky.horseracing.service.serviceinterface.UserServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.UserService;
 import by.milavitsky.horseracing.exception.CommandException;
 import by.milavitsky.horseracing.exception.ServiceException;
 
@@ -17,13 +16,13 @@ import java.util.List;
 import java.util.Set;
 
 import static by.milavitsky.horseracing.controller.CommandParameter.*;
-import static by.milavitsky.horseracing.entity.enums.PermissionEnum.ADMIN_BASIC;
+import static by.milavitsky.horseracing.entity.enumentity.PermissionEnum.ADMIN_BASIC;
 
 public class ShowUsersCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) throws CommandException {
         try {
-            UserServiceInterface userService = (UserServiceInterface) ServiceFactory.getInstance().getClass(UserServiceInterface.class);
+            UserService userService = (UserService) ServiceFactory.getInstance().getClass(UserService.class);
             int pagesCount = userService.getUsersPagesCount();
             request.setAttribute(ATTR_PAGE_NUMBER, pagesCount);
             String page = request.getParameter(PARAM_PAGE);

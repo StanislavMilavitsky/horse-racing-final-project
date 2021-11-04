@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * The interface Race service.
  */
-public interface RaceServiceInterface extends Service {
+public interface RaceService extends Service {
     /**
      * Show all active race.
      *

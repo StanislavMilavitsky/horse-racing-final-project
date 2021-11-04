@@ -7,17 +7,15 @@ import by.milavitsky.horseracing.dao.pool.ProxyConnection;
 import by.milavitsky.horseracing.entity.Bet;
 import by.milavitsky.horseracing.entity.Horse;
 import by.milavitsky.horseracing.entity.Race;
-import by.milavitsky.horseracing.entity.enums.BetType;
-import by.milavitsky.horseracing.entity.enums.TotalResultEnum;
+import by.milavitsky.horseracing.entity.enumentity.BetType;
+import by.milavitsky.horseracing.entity.enumentity.TotalResultEnum;
 import by.milavitsky.horseracing.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 public class BetDao extends BetDaoAbstract {

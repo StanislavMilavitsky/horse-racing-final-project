@@ -2,7 +2,7 @@ package by.milavitsky.horseracing.controller.command;
 
 import by.milavitsky.horseracing.controller.Command;
 import by.milavitsky.horseracing.controller.Router;
-import by.milavitsky.horseracing.entity.enums.PermissionEnum;
+import by.milavitsky.horseracing.entity.enumentity.PermissionEnum;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

@@ -1,6 +1,6 @@
 package by.milavitsky.horseracing.entity;
 
-import by.milavitsky.horseracing.entity.enums.PermissionEnum;
+import by.milavitsky.horseracing.entity.enumentity.PermissionEnum;
 
 import java.io.Serializable;
 import java.util.Set;

@@ -7,7 +7,7 @@ import by.milavitsky.horseracing.dao.daoabstract.RaceDaoAbstract;
 import by.milavitsky.horseracing.entity.Race;
 import by.milavitsky.horseracing.exception.DaoException;
 import by.milavitsky.horseracing.exception.ServiceException;
-import by.milavitsky.horseracing.service.serviceinterface.RaceServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.RaceService;
 
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -32,7 +32,7 @@ import static org.testng.Assert.fail;
 @SuppressStaticInitializationFor({"by.milavitsky.horseracing.dao.DaoFactory", "by.milavitsky.horseracing.dao.Dao", "by.milavitsky.horseracing.cache.CacheFactory"})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*", "javax.management.*"})
 @PrepareForTest({DaoFactory.class, CacheFactory.class, RaceDaoAbstract.class, Cache.class})
-public class RaceServiceTest extends PowerMockTestCase {
+public class RaceServiceImplTest extends PowerMockTestCase {
 
     @Mock
     private DaoFactory daoFactory;
@@ -43,7 +43,7 @@ public class RaceServiceTest extends PowerMockTestCase {
     @Mock
     private Cache cache;
 
-    private RaceServiceInterface service;
+    private RaceService service;
 
 
     @BeforeMethod
@@ -51,7 +51,7 @@ public class RaceServiceTest extends PowerMockTestCase {
         mockStatic(DaoFactory.class);
         when(DaoFactory.getInstance()).thenReturn(daoFactory);
         when((RaceDaoAbstract) daoFactory.getClass(Mockito.any())).thenReturn(raceDao);
-        service = RaceService.getInstance();
+        service = RaceServiceImpl.getInstance();
         mockStatic(CacheFactory.class);
         when(CacheFactory.getInstance()).thenReturn(cacheFactory);
         when((Cache) cacheFactory.getCache(Mockito.any())).thenReturn(cache);

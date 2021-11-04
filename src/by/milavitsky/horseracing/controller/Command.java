@@ -1,6 +1,6 @@
 package by.milavitsky.horseracing.controller;
 
-import by.milavitsky.horseracing.entity.enums.PermissionEnum;
+import by.milavitsky.horseracing.entity.enumentity.PermissionEnum;
 import by.milavitsky.horseracing.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;

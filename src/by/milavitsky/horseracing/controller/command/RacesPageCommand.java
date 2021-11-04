@@ -3,11 +3,11 @@ package by.milavitsky.horseracing.controller.command;
 import by.milavitsky.horseracing.controller.Command;
 import by.milavitsky.horseracing.controller.Router;
 import by.milavitsky.horseracing.entity.Race;
-import by.milavitsky.horseracing.entity.enums.PermissionEnum;
+import by.milavitsky.horseracing.entity.enumentity.PermissionEnum;
 import by.milavitsky.horseracing.exception.CommandException;
 import by.milavitsky.horseracing.exception.ServiceException;
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.serviceinterface.RaceServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.RaceService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import static by.milavitsky.horseracing.controller.CommandParameter.*;
-import static by.milavitsky.horseracing.entity.enums.PermissionEnum.*;
+import static by.milavitsky.horseracing.entity.enumentity.PermissionEnum.*;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -27,7 +27,7 @@ public class RacesPageCommand implements Command {
             String check = request.getParameter(PARAM_RACE_CHECK);
             if (isEmpty(check)) {
                 request.setAttribute(ATTR_CHECKBOX, ATTR_CHECKBOX_OFF);
-                RaceServiceInterface raceService = (RaceServiceInterface) ServiceFactory.getInstance().getClass(RaceServiceInterface.class);
+                RaceService raceService = (RaceService) ServiceFactory.getInstance().getClass(RaceService.class);
                 int pagesCount = raceService.pageNumberActive();
                 request.setAttribute(ATTR_PAGE_NUMBER, pagesCount);
                 String page = request.getParameter(PARAM_PAGE);
@@ -36,7 +36,7 @@ public class RacesPageCommand implements Command {
             }
             if (isNotEmpty(check) && equalsIgnoreCase(check, CHECKBOX)) {
                 request.setAttribute(ATTR_CHECKBOX, ATTR_CHECKBOX_ON);
-                RaceServiceInterface raceService = (RaceServiceInterface) ServiceFactory.getInstance().getClass(RaceServiceInterface.class);
+                RaceService raceService = (RaceService) ServiceFactory.getInstance().getClass(RaceService.class);
                 int pagesCount = raceService.pageNumberAll();
                 request.setAttribute(ATTR_PAGE_NUMBER, pagesCount);
                 String page = request.getParameter(PARAM_PAGE);

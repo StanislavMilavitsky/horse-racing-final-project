@@ -2,11 +2,11 @@ package by.milavitsky.horseracing.controller.command;
 
 import by.milavitsky.horseracing.controller.Command;
 import by.milavitsky.horseracing.controller.Router;
-import by.milavitsky.horseracing.entity.enums.PermissionEnum;
+import by.milavitsky.horseracing.entity.enumentity.PermissionEnum;
 import by.milavitsky.horseracing.exception.CommandException;
 import by.milavitsky.horseracing.exception.ServiceException;
 import by.milavitsky.horseracing.service.ServiceFactory;
-import by.milavitsky.horseracing.service.serviceinterface.RaceServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.RaceService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +14,7 @@ import java.util.Set;
 
 import static by.milavitsky.horseracing.controller.CommandParameter.PAGE_REDIRECT_INDEX;
 import static by.milavitsky.horseracing.controller.CommandParameter.PARAM_RACE_ID;
-import static by.milavitsky.horseracing.entity.enums.PermissionEnum.CUSTOMER_BASIC;
+import static by.milavitsky.horseracing.entity.enumentity.PermissionEnum.CUSTOMER_BASIC;
 
 import static org.apache.commons.lang3.StringUtils.isNoneEmpty;
 
@@ -24,7 +24,7 @@ public class DeleteRaceCommand implements Command {
         try {
             String raceId = request.getParameter(PARAM_RACE_ID);
             if (isNoneEmpty(raceId)) {
-                RaceServiceInterface raceService = (RaceServiceInterface) ServiceFactory.getInstance().getClass(RaceServiceInterface.class);
+                RaceService raceService = (RaceService) ServiceFactory.getInstance().getClass(RaceService.class);
                 raceService.delete(raceId);
             }
             Router router = new Router(PAGE_REDIRECT_INDEX);

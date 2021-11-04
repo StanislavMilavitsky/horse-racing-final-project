@@ -8,7 +8,7 @@ import by.milavitsky.horseracing.dao.daoabstract.RolePermissionsDaoAbstract;
 import by.milavitsky.horseracing.dao.daoabstract.UserDaoAbstract;
 import by.milavitsky.horseracing.entity.Role;
 import by.milavitsky.horseracing.entity.User;
-import by.milavitsky.horseracing.service.serviceinterface.UserServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.UserService;
 import by.milavitsky.horseracing.util.BCryptService;
 import by.milavitsky.horseracing.validation.CommonValidator;
 import by.milavitsky.horseracing.validation.UserValidator;
@@ -32,11 +32,11 @@ import static by.milavitsky.horseracing.controller.CommandParameter.*;
 import static by.milavitsky.horseracing.service.ServiceParameter.USERS_ON_PAGE;
 
 
-public class UserService implements UserServiceInterface {
+public class UserServiceImpl implements UserService {
 
-    private static final Logger logger = LogManager.getLogger(UserService.class);
+    private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
-    private UserService() {
+    private UserServiceImpl() {
     }
 
     @Override
@@ -46,11 +46,11 @@ public class UserService implements UserServiceInterface {
         }
         try {
             UserDaoAbstract userDao = (UserDaoAbstract) DaoFactory.getInstance().getClass(UserDaoAbstract.class);
-           User userAuthorized = userDao.authorization(user);//todo
+           User userAuthorized = userDao.authorization(user);
             if (userAuthorized == null) {//todo
                 return null;
             }
-            if (!BCryptService.verifyPassword(user.getPassword(), userAuthorized.getPassword())) {//todo
+            if (!BCryptService.verifyPassword(user.getPassword(), userAuthorized.getPassword())) {
                 return null;
             }
             setCashRole(userAuthorized);
@@ -174,10 +174,10 @@ public class UserService implements UserServiceInterface {
         }
     }
     private static class UserServiceHolder{
-        private static final UserService HOLDER_INSTANCE = new UserService();
+        private static final UserServiceImpl HOLDER_INSTANCE = new UserServiceImpl();
     }
 
-    public static UserService getInstance() {
+    public static UserServiceImpl getInstance() {
         return UserServiceHolder.HOLDER_INSTANCE;
     }
 

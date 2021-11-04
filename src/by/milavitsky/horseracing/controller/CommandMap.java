@@ -7,6 +7,11 @@ import java.util.Map;
 
 import static by.milavitsky.horseracing.controller.CommandType.*;
 
+/**
+ * The type Command map.
+ * <p>
+ * Map that stores available commands with their implementation.
+ */
 public class CommandMap {
 
     private static final Map<CommandType, Command> commands = new EnumMap<>(CommandType.class);

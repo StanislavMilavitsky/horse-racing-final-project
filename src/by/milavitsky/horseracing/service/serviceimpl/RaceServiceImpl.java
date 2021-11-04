@@ -9,7 +9,7 @@ import by.milavitsky.horseracing.dao.TransactionManager;
 import by.milavitsky.horseracing.entity.Race;
 import by.milavitsky.horseracing.exception.DaoException;
 import by.milavitsky.horseracing.exception.ServiceException;
-import by.milavitsky.horseracing.service.serviceinterface.RaceServiceInterface;
+import by.milavitsky.horseracing.service.serviceinterface.RaceService;
 import by.milavitsky.horseracing.validation.CommonValidator;
 import by.milavitsky.horseracing.validation.RaceValidator;
 import org.apache.logging.log4j.LogManager;
@@ -25,11 +25,11 @@ import static by.milavitsky.horseracing.cache.CacheVariable.COUNT_ACTIVE;
 import static by.milavitsky.horseracing.cache.CacheVariable.COUNT_ALL;
 import static by.milavitsky.horseracing.service.ServiceParameter.RACES_ON_PAGE;
 
-public class RaceService implements RaceServiceInterface {
+public class RaceServiceImpl implements RaceService {
 
-    private static final Logger logger = LogManager.getLogger(RaceService.class);
+    private static final Logger logger = LogManager.getLogger(RaceServiceImpl.class);
 
-    private RaceService(){
+    private RaceServiceImpl(){
     }
 
     @Override
@@ -198,10 +198,10 @@ public class RaceService implements RaceServiceInterface {
     }
 
     private static class RaceServiceHolder{
-        private static final RaceService HOLDER_INSTANCE = new RaceService();
+        private static final RaceServiceImpl HOLDER_INSTANCE = new RaceServiceImpl();
     }
 
-    public static RaceService getInstance() {
+    public static RaceServiceImpl getInstance() {
         return RaceServiceHolder.HOLDER_INSTANCE;
     }
 }
