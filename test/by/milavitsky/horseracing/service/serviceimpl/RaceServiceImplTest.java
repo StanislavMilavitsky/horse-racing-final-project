@@ -8,6 +8,7 @@ import by.milavitsky.horseracing.entity.Race;
 import by.milavitsky.horseracing.exception.DaoException;
 import by.milavitsky.horseracing.exception.ServiceException;
 import by.milavitsky.horseracing.service.serviceinterface.RaceServiceInterface;
+
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
@@ -15,6 +16,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor;
 import org.powermock.modules.testng.PowerMockTestCase;
 import org.testng.annotations.BeforeMethod;
+
 import org.testng.annotations.Test;
 
 import java.time.LocalDateTime;
@@ -23,10 +25,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
+import static org.powermock.api.mockito.PowerMockito.*;
 import static org.testng.Assert.*;
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.fail;
+import static org.testng.Assert.fail;
 
 @SuppressStaticInitializationFor({"by.milavitsky.horseracing.dao.DaoFactory", "by.milavitsky.horseracing.dao.Dao", "by.milavitsky.horseracing.cache.CacheFactory"})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*", "javax.management.*"})

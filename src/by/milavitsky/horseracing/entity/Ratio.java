@@ -1,4 +1,4 @@
-package by.milavitsky.horseracing.entity.enums;
+package by.milavitsky.horseracing.entity.enumentity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

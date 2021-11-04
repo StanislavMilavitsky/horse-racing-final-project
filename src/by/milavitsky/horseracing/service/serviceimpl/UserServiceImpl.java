@@ -26,8 +26,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static by.milavitsky.horseracing.cache.CacheVariables.COUNT_ACTIVE;
-import static by.milavitsky.horseracing.cache.CacheVariables.USER_ROLES;
+import static by.milavitsky.horseracing.cache.CacheVariable.COUNT_ACTIVE;
+import static by.milavitsky.horseracing.cache.CacheVariable.USER_ROLES;
 import static by.milavitsky.horseracing.controller.CommandParameter.*;
 import static by.milavitsky.horseracing.service.ServiceParameter.USERS_ON_PAGE;
 

@@ -5,7 +5,7 @@ import by.milavitsky.horseracing.cache.Cache;
 import by.milavitsky.horseracing.cache.CacheFactory;
 import by.milavitsky.horseracing.cache.CacheType;
 import by.milavitsky.horseracing.dao.daoabstract.RaceDaoAbstract;
-import by.milavitsky.horseracing.dao.pool.TransactionManager;
+import by.milavitsky.horseracing.dao.TransactionManager;
 import by.milavitsky.horseracing.entity.Race;
 import by.milavitsky.horseracing.exception.DaoException;
 import by.milavitsky.horseracing.exception.ServiceException;
@@ -21,8 +21,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static by.milavitsky.horseracing.cache.CacheVariables.COUNT_ACTIVE;
-import static by.milavitsky.horseracing.cache.CacheVariables.COUNT_ALL;
+import static by.milavitsky.horseracing.cache.CacheVariable.COUNT_ACTIVE;
+import static by.milavitsky.horseracing.cache.CacheVariable.COUNT_ALL;
 import static by.milavitsky.horseracing.service.ServiceParameter.RACES_ON_PAGE;
 
 public class RaceService implements RaceServiceInterface {

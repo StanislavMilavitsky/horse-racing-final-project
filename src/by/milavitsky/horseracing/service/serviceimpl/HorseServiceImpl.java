@@ -14,10 +14,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class HorseService implements HorseServiceInterface {
-    private static final Logger logger = LogManager.getLogger(HorseService.class);
+public class HorseServiceImpl implements HorseServiceInterface {
+    private static final Logger logger = LogManager.getLogger(HorseServiceImpl.class);
 
-    private HorseService(){
+    private HorseServiceImpl(){
     }
 
     @Override
@@ -50,10 +50,10 @@ public class HorseService implements HorseServiceInterface {
 
 
     private static class HorseServiceHolder{
-        private static final HorseService HOLDER_INSTANCE = new HorseService();
+        private static final HorseServiceImpl HOLDER_INSTANCE = new HorseServiceImpl();
     }
 
-    public static HorseService getInstance() {
+    public static HorseServiceImpl getInstance() {
         return HorseServiceHolder.HOLDER_INSTANCE;
     }
 

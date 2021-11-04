@@ -55,8 +55,8 @@ public class UserServiceTest extends PowerMockTestCase {
         mockStatic(CacheFactory.class);
         when(CacheFactory.getInstance()).thenReturn(cacheFactory);
         when((Cache) cacheFactory.getCache(Mockito.any())).thenReturn(cache);
-        auth = new User("Андрей", "Зубик", "Az123456", "test@gmail.com");
-        hashUser = new User("John", "Jonas",
+        auth = new User("Андрей", "Зубик", "Password1", "test@gmail.com");
+        hashUser = new User("Андрей", "Зубик",
                 "$2y$12$toYae.S4dAAODIAgM1IfW.8bI9x4Olsq87DdLGQOrBkHXBp0IDV76", "test@gmail.com");
     }
 
@@ -134,7 +134,7 @@ public class UserServiceTest extends PowerMockTestCase {
         try {
             when(userDao.findByEmail("test@gmail.com")).thenReturn(Optional.of(new User()));
             Map<String, String> actual = service.registration(auth);
-            Map<String, String> expected = Map.of("name", "John", "surname", "Jonas",
+            Map<String, String> expected = Map.of("name", "Андрей", "surname", "Зубик",
                     "password", "Password1", "email", "");
             assertEquals(actual, expected);
         } catch (DaoException | ServiceException e) {
