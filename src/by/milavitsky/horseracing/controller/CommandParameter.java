@@ -43,7 +43,7 @@ public final class CommandParameter {
      * PAGES
      */
     public static final String PAGE_INDEX = "/index.jsp";
-    public static final String PAGE_REDIRECT_INDEX = "/horseracing";
+    public static final String PAGE_REDIRECT_INDEX = "/horseracing/";
     public static final String PAGE_RACES = "/WEB-INF/pages/races.jsp";
     public static final String PAGE_USERS = "/WEB-INF/pages/users.jsp";
     public static final String PAGE_ADD_RACE = "/WEB-INF/pages/addRace.jsp";

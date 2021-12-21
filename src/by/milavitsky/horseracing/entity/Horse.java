@@ -17,9 +17,11 @@ public class Horse implements Serializable {
     private String breed;
     private Integer age;
     private String status;
-    private Double perсentageOfWins;
+    private Integer win;
     private Integer participation;
     private String jockey;
+    private Integer percentageOfWin;
+
 
     public Horse() {
     }
@@ -32,7 +34,7 @@ public class Horse implements Serializable {
     }
 
     public Horse(Long id, String name, SexEnum sex, Double weight, String breed, Integer age, String status,
-                 Double perсentageOfWins, Integer participation, String jockey) {
+                 Integer win, Integer participation, String jockey, Integer percentageOfWin) {
         this.id = id;
         this.name = name;
         this.sex = sex;
@@ -40,9 +42,10 @@ public class Horse implements Serializable {
         this.breed = breed;
         this.age = age;
         this.status = status;
-        this.perсentageOfWins = perсentageOfWins;
+        this.win = win;
         this.participation = participation;
         this.jockey = jockey;
+        this.percentageOfWin = percentageOfWin;
     }
 
     public Long getId() {
@@ -101,12 +104,12 @@ public class Horse implements Serializable {
         this.status = status;
     }
 
-    public Double getPerсentageOfWins() {
-        return perсentageOfWins;
+    public Integer getWin() {
+        return win;
     }
 
-    public void setPerсentageOfWins(Double perсentageOfWins) {
-        this.perсentageOfWins = perсentageOfWins;
+    public void setWin(Integer win) {
+        this.win = win;
     }
 
     public Integer getParticipation() {
@@ -124,6 +127,15 @@ public class Horse implements Serializable {
     public void setJockey(String jockey) {
         this.jockey = jockey;
     }
+
+    public Integer getPercentageOfWin() {
+        return percentageOfWin;
+    }
+
+    public void setPercentageOfWin(Integer percentageOfWin) {
+        this.percentageOfWin = percentageOfWin;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -148,7 +160,7 @@ public class Horse implements Serializable {
         builder.append(", breed='").append(breed);
         builder.append(", age='").append(age);
         builder.append(", status='").append(status);
-        builder.append(", perсentageOfWins=").append(perсentageOfWins);
+        builder.append(", wins=").append(win);
         builder.append(", participation='").append(participation);
         builder.append(", jockey='").append(jockey);
         builder.append('}');

@@ -6,6 +6,7 @@ import by.milavitsky.horseracing.entity.Race;
 import by.milavitsky.horseracing.exception.DaoException;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -80,6 +81,8 @@ public abstract class RaceDaoAbstract implements Dao<Race, Long> {
      */
     public abstract boolean addRaceResult(ProxyConnection connection, Map<Integer, Long> resultMap, Long raceId) throws SQLException;
 
+    public abstract LocalDateTime getRaceTime(Long raceId) throws DaoException;
+
     @Override
     public final Optional<Race> update(Race race) throws DaoException {
         throw new UnsupportedOperationException();
@@ -94,5 +97,4 @@ public abstract class RaceDaoAbstract implements Dao<Race, Long> {
     public final boolean delete(Long id) {
         throw new UnsupportedOperationException();
     }
-
 }

@@ -1,10 +1,13 @@
 package by.milavitsky.horseracing.dao.daoabstract;
 
 import by.milavitsky.horseracing.dao.Dao;
+import by.milavitsky.horseracing.dao.pool.ProxyConnection;
 import by.milavitsky.horseracing.entity.Horse;
 import by.milavitsky.horseracing.exception.DaoException;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -23,6 +26,8 @@ public abstract class HorseDaoAbstract implements Dao<Horse, Long> {
      * @throws DaoException
      */
     public abstract Set<Horse> findByRace(Long raceId) throws DaoException;
+
+    public abstract boolean updateParticipation(ProxyConnection connection, Map<Integer, Long> result) throws SQLException;
 
     @Override
     public final Optional<Horse> create(Horse horse) throws DaoException {
@@ -43,4 +48,5 @@ public abstract class HorseDaoAbstract implements Dao<Horse, Long> {
     public final boolean delete(Long id) throws DaoException {
         throw new UnsupportedOperationException();
     }
+
 }

@@ -4,7 +4,7 @@
 <head>
     <title>Index</title>
 </head>
-<body>
+<body>isCurrentRace
 <%--<c:redirect url="dispatcher?command=races"></c:redirect>--%>
 <jsp:forward page="dispatcher?command=races"/>
 </body>

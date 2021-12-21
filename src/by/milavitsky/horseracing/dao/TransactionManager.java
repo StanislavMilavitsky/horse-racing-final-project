@@ -24,31 +24,39 @@ public class TransactionManager {
     private final BetDaoAbstract betDao = (BetDaoAbstract) DaoFactory.getInstance().getClass(BetDaoAbstract.class);
     private final UserDaoAbstract userDao = (UserDaoAbstract) DaoFactory.getInstance().getClass(UserDaoAbstract.class);
     private final RatioDaoAbstract ratioDao = (RatioDaoAbstract) DaoFactory.getInstance().getClass(RatioDaoAbstract.class);
+    private final HorseDaoAbstract horseDao = (HorseDaoAbstract) DaoFactory.getInstance().getClass(HorseDaoAbstract.class);
 
     private TransactionManager() {
     }
 
     /**
      * Enter result in database insert in other tables
+     *
      * @param resultMap
      * @param raceId
      * @throws DaoException
      */
     public void enterResult(Map<Integer, Long> resultMap, Long raceId) throws DaoException {
         ProxyConnection connection = null;
-        try  {
+
+        try {
             connection = ConnectionManager.get();
             connection.setAutoCommit(false);
-            boolean isAddRaceResult = raceDao.addRaceResult(connection, resultMap, raceId);
+
+            boolean isAddRaceResult = raceDao.addRaceResult(connection, resultMap, raceId);//todo пробелы, private методы
             if (!isAddRaceResult) {
                 throw new SQLException("Race result not added!");
             }
+
+
             List<Bet> betByRace = betDao.findByRace(connection, raceId);
             for (Bet bet : betByRace) {
                 BigDecimal cash = userDao.findCash(connection, bet.getUserId());
                 boolean isWin = false;
+
+
                 switch (bet.getBetType()) {
-                    case WIN : {
+                    case WIN: {
                         if (bet.getHorseId().equals(resultMap.get(1))) {
                             isWin = true;
                         }
@@ -63,8 +71,10 @@ public class TransactionManager {
                     }
                     break;
                 }
+
                 BigDecimal newCash = cash;
                 if (isWin) {
+
                     BigDecimal betWin = bet.getAmountBet().multiply(bet.getRatio());
                     newCash = cash.add(betWin);
                 }
@@ -77,8 +87,15 @@ public class TransactionManager {
                 if (!isUpdateResult) {
                     throw new SQLException("Total result not update!");
                 }
+
+            }
+
+            boolean isUpdateHorseParticipation = horseDao.updateParticipation(connection, resultMap);
+            if (!isUpdateHorseParticipation) {
+                throw new SQLException("Win horse increment not update!");
             }
             connection.commit();
+
         } catch (SQLException e) {
             rollback(connection);
             logger.error("Total result not update!", e);
@@ -90,12 +107,14 @@ public class TransactionManager {
 
     /**
      * Add bet in database insert in other tables
+     *
      * @param bet
      * @return bet if it is insert
      * @throws DaoException
      */
     public Optional<Bet> addBet(Bet bet) throws DaoException {
         ProxyConnection connection = null;
+
         try {
             connection = ConnectionManager.get();
             connection.setAutoCommit(false);
@@ -112,6 +131,7 @@ public class TransactionManager {
             boolean result = userDao.updateCash(connection, newCash, bet.getUserId());
             connection.commit();
             return result ? Optional.of(bet) : Optional.empty();
+
         } catch (SQLException e) {
             rollback(connection);
             logger.error("Add bet exception!", e);
@@ -123,6 +143,7 @@ public class TransactionManager {
 
     /**
      * Delete race from databases affecting different tables
+     *
      * @param id
      * @return boolean of result
      * @throws DaoException
@@ -173,6 +194,7 @@ public class TransactionManager {
 
     /**
      * Rollback if commit failed
+     *
      * @param connection from Proxy
      */
     private void rollback(ProxyConnection connection) {

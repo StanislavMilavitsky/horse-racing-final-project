@@ -10,8 +10,6 @@ import by.milavitsky.horseracing.exception.ServiceException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java.util.Collections;
 import java.util.Set;
 
 import static by.milavitsky.horseracing.entity.enumentity.PermissionEnum.ADMIN_BASIC;
@@ -28,6 +26,7 @@ public class BanUserCommand implements Command {
                 UserService userService = (UserService) ServiceFactory.getInstance().getClass(UserService.class);
                 userService.ban(userId);
             }
+
             Router router = new Router(request);
             router.redirect();
             return router;

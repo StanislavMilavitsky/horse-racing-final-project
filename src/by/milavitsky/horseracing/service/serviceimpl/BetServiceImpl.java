@@ -47,6 +47,7 @@ public class BetServiceImpl implements BetService {
         if (!BetValidator.isInfoValid(info) || !CommonValidator.isBigDecimalValid(betCash)) {
             return false;
         }
+
         try {
             BigDecimal cash = new BigDecimal(betCash);
             if (cash.compareTo(userCash) > 0) {

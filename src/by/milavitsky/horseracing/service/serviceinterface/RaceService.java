@@ -72,4 +72,11 @@ public interface RaceService extends Service {
      * @throws ServiceException the service exception
      */
     Race findInfo(String raceId) throws ServiceException;
+
+    /**
+     *
+     * @param info string from view
+     * @return chech race time
+     */
+    boolean isCorrectTimeRace(String info) throws ServiceException;
 }

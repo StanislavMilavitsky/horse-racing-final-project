@@ -4,7 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import static by.milavitsky.horseracing.controller.CommandParameter.*;
 
-public class Router {
+public class
+Router {
     private final String page;
     private boolean isRedirect;
 

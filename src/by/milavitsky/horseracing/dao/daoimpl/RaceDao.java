@@ -16,6 +16,8 @@ import java.util.*;
 public class RaceDao extends RaceDaoAbstract {
 
     private static final Logger logger = LogManager.getLogger(BetDao.class);
+    private static final String SELECT_TIME_RACE = "SELECT time FROM races WHERE id = ?;" ;
+
     private RaceDao(){
     }
 
@@ -134,6 +136,25 @@ public class RaceDao extends RaceDaoAbstract {
         }
         return rowsEffected > 0;
     }
+
+    @Override
+    public LocalDateTime getRaceTime(Long raceId) throws DaoException {
+        try (var connection = ConnectionManager.get();
+             var statement = connection.prepareStatement(SELECT_TIME_RACE)){
+            statement.setLong(1, raceId);
+            var resultSet = statement.executeQuery();
+            LocalDateTime raceTime = null;
+            while(resultSet.next()){
+                 raceTime = resultSet.getTimestamp("time").toLocalDateTime();
+            }
+            return raceTime;
+        } catch (SQLException e) {
+            logger.error("Get time race exception!", e);
+            throw new DaoException("Get time race exception!", e);
+
+        }
+    }
+
 
     public static RaceDao getInstance() {
         return RaceDaoHolder.HOLDER_INSTANCE;

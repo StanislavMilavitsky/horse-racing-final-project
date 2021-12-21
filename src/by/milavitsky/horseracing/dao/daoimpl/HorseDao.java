@@ -2,6 +2,7 @@ package by.milavitsky.horseracing.dao.daoimpl;
 
 import by.milavitsky.horseracing.dao.daoabstract.HorseDaoAbstract;
 import by.milavitsky.horseracing.dao.pool.ConnectionManager;
+import by.milavitsky.horseracing.dao.pool.ProxyConnection;
 import by.milavitsky.horseracing.entity.Horse;
 import by.milavitsky.horseracing.entity.enumentity.SexEnum;
 import by.milavitsky.horseracing.exception.DaoException;
@@ -14,10 +15,12 @@ import java.util.*;
 
 public class HorseDao extends HorseDaoAbstract {
     private static final Logger logger = LogManager.getLogger(BetDao.class);
-    private static final String FIND_ALL_HORSES_SQL = "SELECT id, name, sex, weight, breed, age, status, perсentage_of_wins," +
+    private static final String FIND_ALL_HORSES_SQL = "SELECT id, name, sex, weight, breed, age, status, wins," +
             " participation, jockey FROM horses";
-    private static final String FIND_HORSE_BY_RACE = "SELECT id, name, sex, weight, breed, age, status, perсentage_of_wins, participation," +
+    private static final String FIND_HORSE_BY_RACE = "SELECT id, name, sex, weight, breed, age, status, wins, participation," +
             " jockey, place  FROM horses INNER JOIN races_has_horses rhh ON horses.id = rhh.horses_id WHERE rhh.races_id = ?;";
+    private static final String ADD_WIN_HORSE = "UPDATE horses SET wins  = wins + 1 WHERE  id = ?;";
+    private static final String ADD_PARTICIPATION_HORSE = "UPDATE horses SET participation = participation + 1 WHERE id = ?;" ;
 
     private HorseDao() {
     }
@@ -57,13 +60,28 @@ public class HorseDao extends HorseDaoAbstract {
         }
     }
 
+    @Override
+    public boolean updateParticipation(ProxyConnection connection, Map<Integer, Long>  resultMap) throws SQLException {
+        var statementWin = connection.prepareStatement(ADD_WIN_HORSE);
+        var statementParticipation = connection.prepareStatement(ADD_PARTICIPATION_HORSE);
+        statementWin.setLong(1, resultMap.get(1));
+        int executeUpdate = 0;
+        for (int i = 1; i < resultMap.size() ; i++) {
+            statementParticipation.setLong(1, resultMap.get(i));
+             executeUpdate = statementParticipation.executeUpdate();
+        }
+        int rowsEffected = statementParticipation.executeUpdate();
+        return rowsEffected + executeUpdate > 0;
 
-    private static class HorseDaoHolder {
-        private static final HorseDao HOLDER_INSTANCE = new HorseDao();
     }
 
     public static HorseDao getInstance() {
         return HorseDaoHolder.HOLDER_INSTANCE;
+    }
+
+    private static class HorseDaoHolder {
+        private static final HorseDao HOLDER_INSTANCE = new HorseDao();
+
     }
 
     private Horse createHorse(ResultSet set) throws SQLException {
@@ -74,9 +92,10 @@ public class HorseDao extends HorseDaoAbstract {
         String breed = set.getString("breed");
         Integer age = set.getInt("age");
         String status = set.getString("status");
-        Double perсentageOfWins = set.getDouble("perсentage_of_wins");
+        Integer win = set.getInt("wins");
         Integer participation = set.getInt("participation");
         String jockey = set.getString("jockey");
-        return new Horse(id, name, sex, weight, breed, age, status, perсentageOfWins, participation, jockey);
+        Integer percentageOfWin = (int) (Double.valueOf(win) / Double.valueOf(participation) * 100);
+        return new Horse(id, name, sex, weight, breed, age, status, win, participation, jockey,percentageOfWin);
     }
 }

@@ -10,6 +10,7 @@ import by.milavitsky.horseracing.entity.Race;
 import by.milavitsky.horseracing.exception.DaoException;
 import by.milavitsky.horseracing.exception.ServiceException;
 import by.milavitsky.horseracing.service.serviceinterface.RaceService;
+import by.milavitsky.horseracing.validation.BetValidator;
 import by.milavitsky.horseracing.validation.CommonValidator;
 import by.milavitsky.horseracing.validation.RaceValidator;
 import org.apache.logging.log4j.LogManager;
@@ -23,9 +24,15 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static by.milavitsky.horseracing.cache.CacheVariable.COUNT_ACTIVE;
 import static by.milavitsky.horseracing.cache.CacheVariable.COUNT_ALL;
+import static by.milavitsky.horseracing.controller.CommandParameter.BLANK;
 import static by.milavitsky.horseracing.service.ServiceParameter.RACES_ON_PAGE;
 
 public class RaceServiceImpl implements RaceService {
+
+    private static final String INFO_TITLE = "Ratio\\{";
+    private static final int INFO_ARRAY = 4;
+    private static final String COMMA = ",";
+    private static final String EQUAL_SIGN = "=";
 
     private static final Logger logger = LogManager.getLogger(RaceServiceImpl.class);
 
@@ -195,6 +202,33 @@ public class RaceServiceImpl implements RaceService {
             logger.error("Find race info exception!", e);
             throw new ServiceException("Find race info exception!", e);
         }
+    }
+
+    @Override
+    public boolean isCorrectTimeRace(String info) throws ServiceException {
+        if (!BetValidator.isInfoValid(info)) {
+            return false;
+        }
+
+        try{
+        String string = info.replaceAll(INFO_TITLE, BLANK).substring(0, info.length() - 1 - INFO_TITLE.length());
+        String[] split = string.split(COMMA);
+        String[] infoArray = new String[INFO_ARRAY];
+        if (split.length == INFO_ARRAY) {
+            for (int i = 0; i < split.length; i++) {
+                String str = split[i];
+                int index = str.indexOf(EQUAL_SIGN);
+                infoArray[i] = str.substring(index + 1);
+            }
+        }
+            RaceDaoAbstract raceDao = (RaceDaoAbstract) DaoFactory.getInstance().getClass(RaceDaoAbstract.class);
+        LocalDateTime timeRace = raceDao.getRaceTime(Long.valueOf(infoArray[0]));
+           return timeRace.isAfter(LocalDateTime.now());
+        } catch (DaoException e) {
+            logger.error("Race time info exception!", e);
+            throw new ServiceException("Race time info exception!", e);
+        }
+
     }
 
     private static class RaceServiceHolder{

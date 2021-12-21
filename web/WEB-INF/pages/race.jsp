@@ -32,6 +32,15 @@
                                     <fmt:message key="label.race.age"/>
                                 </th>
                                 <th scope="col">
+                                    <fmt:message key="label.race.win"/>
+                                </th>
+                                <th scope="col">
+                                    <fmt:message key="label.race.participation"/>
+                                </th>
+                                <th scope="col">
+                                    <fmt:message key="label.race.percentageOfWin"/>
+                                </th>
+                                <th scope="col">
                                     <fmt:message key="label.race.jockey"/>
                                 </th>
                                 <th scope="col">
@@ -48,6 +57,9 @@
                                     <td>${count.index+1} </td>
                                     <td> ${horse.name} </td>
                                     <td>${horse.age}</td>
+                                    <td>${horse.win}</td>
+                                    <td>${horse.participation}</td>
+                                    <td>${horse.percentageOfWin}</td>
                                     <td>${horse.jockey}</td>
                                     <c:forEach var="winRatio" items="${ratioList}">
                                         <c:if test="${winRatio.horseId==horse.id&&winRatio.typeId=='1'}">
@@ -86,9 +98,10 @@
             </div>
             <div class="col-lg-6" style="visibility:hidden" id="order">
                 <form class="form-horizontal" action="${pageContext.request.contextPath}/dispatcher" method="post">
-                    <input id="add-parameter" type="hidden" name="command" value="bet">
+                    <input id="add-parameter-bet" type="hidden" name="command" value="bet">
                     <input id="add-parameter-ratio" type="hidden" name="info">
                     <input id="add-parameter-cash" type="hidden" name="cash">
+                    <input id="add-parameter-race" type="hidden" name="command" value="/race">//todo
                     <div class="card ">
                         <div class="card-body">
                             <div class="media">
@@ -122,7 +135,7 @@
                                 </label>
                                 <div class="col-sm-9">
                                     <input onkeyup="updateField()" onkeydown="updateField()" class="form-control"
-                                           type="text" name="betCash" required pattern="-?(?:\d+(?:\.\d+)?|\.\d+)"
+                                           type="text" name="betCash" required pattern="[1-9]\d*(\.\d+)?"
                                            id="bet-cash">
                                 </div>
                             </div>
@@ -151,6 +164,7 @@
             </div>
         </div>
     </div>
+
 </div>
 <%@include file="/WEB-INF/pages/fragments/footer.jsp" %>
 </div>
